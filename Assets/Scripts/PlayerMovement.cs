@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
@@ -10,7 +11,6 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float angularSpeed = 150f;
     [SerializeField] private float jumpSpeed = 100.0f;
     private bool canJump = false;
-
 
     private Rigidbody rb;
 
@@ -32,14 +32,12 @@ public class PlayerMovement : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
     }
-
-
+    
     private void Update()
     {
         float horizontalInput = 0f;
         float verticalInput = 0f;
         bool jumpInput = false;
-
 
         if (gameObject.CompareTag("Player2"))
         {
@@ -81,7 +79,6 @@ public class PlayerMovement : MonoBehaviour
         transform.Rotate(rotation);
         rb.AddForce(movement);
         rb.AddForce(jumpVector, ForceMode.Impulse);
-    }
 }
 
 
