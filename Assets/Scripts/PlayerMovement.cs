@@ -6,9 +6,9 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    [SerializeField] private float speed = 1000f; 
+    [SerializeField] private float speed = 1000f;
     [SerializeField] private float angularSpeed = 150f;
-    [SerializeField] private float jumpSpeed = 100.0f;
+    [SerializeField] private float jumpSpeed = 10.0f;
     private bool canJump = false;
 
 
@@ -55,7 +55,7 @@ public class PlayerMovement : MonoBehaviour
 
         // Mouvement
         movement = transform.TransformDirection(Vector3.forward) * verticalInput * speed;
-        
+
 
         if (jumpInput && canJump)
         {
@@ -68,14 +68,14 @@ public class PlayerMovement : MonoBehaviour
 
 
 
-        
+
     }
 
     private void FixedUpdate()
     {
         transform.Rotate(rotation);
         rb.AddForce(movement);
-        if(jumpVector != Vector3.zero)
+        if (jumpVector != Vector3.zero)
         {
             rb.AddForce(jumpVector, ForceMode.Impulse);
             jumpVector = Vector3.zero;
