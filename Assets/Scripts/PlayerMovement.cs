@@ -60,12 +60,7 @@ public class PlayerMovement : MonoBehaviour
         if (jumpInput && canJump)
         {
             jumpVector = Vector3.up * jumpSpeed;
-            canJump = false;
             Debug.Log("pk tu saute pa");
-        }
-        else
-        {
-            jumpVector = Vector3.zero;
         }
 
         // Rotation
@@ -80,7 +75,12 @@ public class PlayerMovement : MonoBehaviour
     {
         transform.Rotate(rotation);
         rb.AddForce(movement);
-        rb.AddForce(jumpVector, ForceMode.Impulse);
+        if(jumpVector != Vector3.zero)
+        {
+            rb.AddForce(jumpVector, ForceMode.Impulse);
+            jumpVector = Vector3.zero;
+            canJump = false;
+        }
     }
 }
 
