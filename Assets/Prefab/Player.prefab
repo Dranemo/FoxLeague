@@ -122,8 +122,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3e085d43c8618b478cfed411580a2d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 5
-  angularSpeed: 5
+  speed: 1000
+  angularSpeed: 150
+  jumpSpeed: 5000
 --- !u!54 &9197217051837952892
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -132,8 +133,8 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 861642629207035380}
   serializedVersion: 4
-  m_Mass: 1
-  m_Drag: 0
+  m_Mass: 70
+  m_Drag: 1.5
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
@@ -161,7 +162,6 @@ GameObject:
   m_Component:
   - component: {fileID: 7207518335426884041}
   - component: {fileID: 2175229544825983592}
-  - component: {fileID: 5901895343613851847}
   - component: {fileID: 4634539657668010483}
   m_Layer: 0
   m_Name: PlayerCamera
@@ -236,14 +236,6 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
---- !u!81 &5901895343613851847
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3877773790006761992}
-  m_Enabled: 1
 --- !u!114 &4634539657668010483
 MonoBehaviour:
   m_ObjectHideFlags: 0

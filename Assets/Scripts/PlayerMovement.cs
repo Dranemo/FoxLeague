@@ -1,39 +1,86 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    [SerializeField] private float speed = 5f; // Vitesse de d�placement du joueur
-    [SerializeField] private float angularSpeed = 5f;
+    [SerializeField] private float speed = 1000f; 
+    [SerializeField] private float angularSpeed = 150f;
+    [SerializeField] private float jumpSpeed = 100.0f;
+    private bool canJump = false;
 
-    // Update is called once per frame
-    void Update()
+
+    private Rigidbody rb;
+
+    Vector3 movement;
+    Vector3 rotation;
+    Vector3 jumpVector = Vector3.zero;
+
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.transform.CompareTag("Floor"))
+        {
+            canJump = true;
+            Debug.Log(canJump);
+        }
+    }
+
+    private void Awake()
+    {
+        rb = GetComponent<Rigidbody>();
+    }
+
+
+    private void Update()
     {
         float horizontalInput = 0f;
         float verticalInput = 0f;
+        bool jumpInput = false;
 
-        // V�rifie quel joueur est en train de jouer et ajuste les entr�es en cons�quence
+
         if (gameObject.CompareTag("Player2"))
         {
-            horizontalInput = Input.GetAxis("Horizontal2");
-            verticalInput = Input.GetAxis("Vertical2");
+            //horizontalInput = Input.GetAxis("Horizontal2");
+            //verticalInput = Input.GetAxis("Vertical2");
         }
         else
         {
             horizontalInput = Input.GetAxis("Horizontal");
             verticalInput = Input.GetAxis("Vertical");
+            jumpInput = Input.GetButton("Jump");
         }
 
+        // Mouvement
+        movement = transform.TransformDirection(Vector3.forward) * verticalInput * speed;
+        
 
-        Vector3 movement = transform.position + transform.TransformDirection(Vector3.forward) * verticalInput * speed * Time.deltaTime;
-        Vector3 rotation = transform.up * horizontalInput * angularSpeed * Time.deltaTime * 10;
+        if (jumpInput && canJump)
+        {
+            jumpVector = Vector3.up * jumpSpeed;
+            canJump = false;
+            Debug.Log("pk tu saute pa");
+        }
+        else
+        {
+            jumpVector = Vector3.zero;
+        }
+
+        // Rotation
+        rotation = transform.up * horizontalInput * angularSpeed * Time.deltaTime;
+
+
 
         
-        Debug.Log(rotation);
+    }
 
+    private void FixedUpdate()
+    {
         transform.Rotate(rotation);
-        transform.position = movement;
+        rb.AddForce(movement);
+        rb.AddForce(jumpVector, ForceMode.Impulse);
     }
 }
 
