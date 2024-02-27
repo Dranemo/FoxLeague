@@ -66,14 +66,14 @@ public class PlayerMovement : MonoBehaviour
 
 
 
-        
+
     }
 
     private void FixedUpdate()
     {
         rb.AddForce(movementX);
         rb.AddForce(movementZ);
-
+        
         if (jumpVector != Vector3.zero)
         {
             rb.AddForce(jumpVector, ForceMode.Impulse);
