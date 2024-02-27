@@ -7,14 +7,14 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] private float speed = 1000f; 
-    [SerializeField] private float angularSpeed = 150f;
     [SerializeField] private float jumpSpeed = 100.0f;
     private bool canJump = false;
 
 
     private Rigidbody rb;
 
-    Vector3 movement;
+    Vector3 movementX;
+    Vector3 movementZ;
     Vector3 rotation;
     Vector3 jumpVector = Vector3.zero;
 
@@ -54,17 +54,15 @@ public class PlayerMovement : MonoBehaviour
         }
 
         // Mouvement
-        movement = transform.TransformDirection(Vector3.forward) * verticalInput * speed;
-        
+        movementZ = transform.TransformDirection(Vector3.forward) * verticalInput * speed;
+        movementX = transform.TransformDirection(Vector3.right) * horizontalInput * speed;
+
 
         if (jumpInput && canJump)
         {
             jumpVector = Vector3.up * jumpSpeed;
             Debug.Log("pk tu saute pa");
         }
-
-        // Rotation
-        rotation = transform.up * horizontalInput * angularSpeed * Time.deltaTime;
 
 
 
@@ -73,9 +71,10 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        transform.Rotate(rotation);
-        rb.AddForce(movement);
-        if(jumpVector != Vector3.zero)
+        rb.AddForce(movementX);
+        rb.AddForce(movementZ);
+
+        if (jumpVector != Vector3.zero)
         {
             rb.AddForce(jumpVector, ForceMode.Impulse);
             jumpVector = Vector3.zero;
