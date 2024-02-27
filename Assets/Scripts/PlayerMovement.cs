@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Move : MonoBehaviour
+public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] private float speed = 5f; // Vitesse de d�placement du joueur
     [SerializeField] private float angularSpeed = 5f;
@@ -14,7 +14,7 @@ public class Move : MonoBehaviour
         float verticalInput = 0f;
 
         // V�rifie quel joueur est en train de jouer et ajuste les entr�es en cons�quence
-        if (gameObject.CompareTag("Player"))
+        if (gameObject.CompareTag("Player2"))
         {
             horizontalInput = Input.GetAxis("Horizontal2");
             verticalInput = Input.GetAxis("Vertical2");
@@ -27,7 +27,7 @@ public class Move : MonoBehaviour
 
 
         Vector3 movement = transform.position + transform.TransformDirection(Vector3.forward) * verticalInput * speed * Time.deltaTime;
-        Vector3 rotation = transform.up * horizontalInput * angularSpeed * Time.deltaTime;
+        Vector3 rotation = transform.up * horizontalInput * angularSpeed * Time.deltaTime * 10;
 
         
         Debug.Log(rotation);
