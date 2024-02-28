@@ -10,6 +10,7 @@ TagManager:
   - Ball
   - Goal2
   - MainCamera2
+  - AI
   layers:
   - Default
   - TransparentFX

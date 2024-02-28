@@ -41,7 +41,7 @@ public class PlayerMovement : MonoBehaviour
         bool jumpInput = false;
 
 
-        if (gameObject.CompareTag("Player2"))
+        if (gameObject.CompareTag("Player2") || gameObject.CompareTag("AI"))
         {
             //horizontalInput = Input.GetAxis("Horizontal2");
             //verticalInput = Input.GetAxis("Vertical2");

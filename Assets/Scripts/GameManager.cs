@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class GameManager : MonoBehaviour
 {
@@ -16,8 +17,11 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject rock02;
     [SerializeField] private GameObject rock03;
 
+    [SerializeField] private GameObject playerPrefab;
+    [SerializeField] private GameObject ballPrefab;
 
 
+    [SerializeField, Range(1,2)] private int playerNumber = 2;
 
 
     [SerializeField] private Transform cam1;
@@ -53,20 +57,33 @@ public class GameManager : MonoBehaviour
 
     public void ResetPositions()
     {
+        //Reset la balle
         GameObject ball = GameObject.FindWithTag("Ball");
+        ball.transform.GetComponent<Rigidbody>().isKinematic = true;
         ball.transform.position = ballPos.transform.position;
         ball.transform.GetComponent<Rigidbody>().isKinematic = false;
 
-
+        //Reset le joueur 1
         GameObject player = GameObject.FindWithTag("Player");
         player.transform.GetComponent<Rigidbody>().isKinematic = true;
+
         player.transform.position = playerPos.transform.position;
+        player.transform.LookAt(new Vector3(0, 0, 1));
+
         player.transform.GetComponent<Rigidbody>().isKinematic = false;
 
 
+        //Reset le joueur 2 ou l'IA
         GameObject player2 = GameObject.FindWithTag("Player2");
+        if(player2 == null)
+        {
+            player2 = GameObject.FindWithTag("AI");
+        }
         player2.transform.GetComponent<Rigidbody>().isKinematic = true;
+
         player2.transform.position = player2Pos.transform.position;
+        player2.transform.LookAt(new Vector3(0, 0, -1));
+
         player2.transform.GetComponent<Rigidbody>().isKinematic = false;
 
     }
@@ -74,6 +91,18 @@ public class GameManager : MonoBehaviour
 
     private void GenerateTerrain()
     {
+        GeneratePlayer();
+        GenerateBall();
+        GenerateRandomObstacle();
+    }
+
+    private void GenerateRandomObstacle()
+    {
+        //instancier un gameobject vide
+        GameObject obstacles = new GameObject("Obstacles");
+
+
+
         List<List<int>> positionList = new List<List<int>>();
 
         for (int i = 0; i < 10; i++)
@@ -139,8 +168,62 @@ public class GameManager : MonoBehaviour
             }
 
             itemCreated.name = "item" + i;
-
-
+            itemCreated.transform.parent = obstacles.transform;
         }
+    }
+
+    private void GeneratePlayer()
+    {
+        GameObject playerGen = null;
+
+        // Joueur 1
+        playerGen = Instantiate(playerPrefab, Vector3.zero, Quaternion.identity);
+        playerGen.name = "Player1";
+        playerGen.layer = 6;
+        playerGen.tag = "Player";
+
+        playerGen.transform.Find("PlayerCamera").GetComponent<Camera>().cullingMask &= ~(1 << 6);
+        playerGen.transform.Find("PlayerCamera").tag = "MainCamera";
+
+        playerGen.transform.Find("SkinPlayer").gameObject.layer = 6;
+        playerGen.transform.Find("ModelPlayer").gameObject.layer = 6;
+
+        // Joueur 2
+        playerGen = Instantiate(playerPrefab, Vector3.zero, Quaternion.identity);
+        playerGen.layer = 7;
+
+        Rect acutalRectPlayer2 = playerGen.transform.Find("PlayerCamera").GetComponent<Camera>().rect;
+
+        playerGen.transform.Find("PlayerCamera").GetComponent<Camera>().cullingMask &= ~(1 << 7);
+        playerGen.transform.Find("PlayerCamera").GetComponent<Camera>().rect = new Rect(0.5f, acutalRectPlayer2.y, acutalRectPlayer2.width, acutalRectPlayer2.height);
+        playerGen.transform.Find("PlayerCamera").tag = "MainCamera";
+
+        playerGen.transform.Find("SkinPlayer").gameObject.layer = 7;
+        playerGen.transform.Find("ModelPlayer").gameObject.layer = 7;
+
+
+
+        switch (playerNumber)
+        {
+            case 1:
+                playerGen.name = "AI";
+                playerGen.tag = "AI";
+                break;
+
+
+            case 2:
+                playerGen.name = "Player2";
+                playerGen.tag = "Player2";
+                break;
+        }
+    }
+
+    private void GenerateBall()
+    {
+        GameObject ballGen = null;
+
+        ballGen = Instantiate(ballPrefab, Vector3.zero, Quaternion.identity);
+        ballGen.name = "Ball";
+        ballGen.tag = "Ball";
     }
 }
