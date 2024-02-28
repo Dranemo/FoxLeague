@@ -8,6 +8,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Transform ballPos;
     [SerializeField] private Transform playerPos;
     [SerializeField] private Transform player2Pos;
+
+    [SerializeField] public int score1;
+    [SerializeField] public int score2;
     private static GameManager instance;
     public static GameManager GetInstance()
     {
