@@ -204,6 +204,14 @@ MonoBehaviour:
   ballPos: {fileID: 1559688346}
   playerPos: {fileID: 1656333140}
   player2Pos: {fileID: 1911356568}
+  birchTree: {fileID: 0}
+  oakTree: {fileID: 0}
+  rock01: {fileID: 0}
+  rock02: {fileID: 0}
+  rock03: {fileID: 0}
+  playerPrefab: {fileID: 0}
+  ballPrefab: {fileID: 0}
+  playerNumber: 2
   cam1: {fileID: 0}
   cam2: {fileID: 0}
   score1: 0
@@ -803,17 +811,17 @@ PrefabInstance:
     - target: {fileID: 1175590563906639853, guid: 0ead2e34a7ef3a24686ae3d5ee92feac,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 46.086426
+      value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 1175590563906639853, guid: 0ead2e34a7ef3a24686ae3d5ee92feac,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 25.240772
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1175590563906639853, guid: 0ead2e34a7ef3a24686ae3d5ee92feac,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 14.639544
+      value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 1175590563906639853, guid: 0ead2e34a7ef3a24686ae3d5ee92feac,
         type: 3}

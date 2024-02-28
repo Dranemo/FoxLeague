@@ -29,6 +29,8 @@ public class CameraController : MonoBehaviour
             transform.localRotation = Quaternion.Euler(xRotationCamera, 0f, 0f);
             playerBody.Rotate(Vector3.up * mouseX);
         }
+
+
         camInput = Input.GetButtonDown("CameraView");
         if (camInput && CompareTag("MainCamera"))
         {
