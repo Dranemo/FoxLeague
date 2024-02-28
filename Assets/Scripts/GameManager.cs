@@ -20,6 +20,11 @@ public class GameManager : MonoBehaviour
 
 
 
+    [SerializeField] private Transform cam1;
+    [SerializeField] private Transform cam2;
+
+    [SerializeField] public int score1;
+    [SerializeField] public int score2;
     private static GameManager instance;
     public static GameManager GetInstance()
     {

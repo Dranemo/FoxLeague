@@ -19,6 +19,15 @@ public class Goal : MonoBehaviour
 
 
             GameManager.GetInstance().ResetPositions();
+
+            if (CompareTag("Goal1"))
+            {
+                GameManager.GetInstance().score1 += 1;
+            }
+            else if (CompareTag("Goal2"))
+            {
+                GameManager.GetInstance().score2 += 1;
+            }
         }
     }
 }
