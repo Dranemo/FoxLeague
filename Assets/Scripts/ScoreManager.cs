@@ -13,7 +13,7 @@ public class Canvas : MonoBehaviour
         gameManager = GameManager.GetInstance();
         Debug.Log(gameManager.score1);
 
-        TextMeshProUGUI textComponent = this.transform.Find("Text (TMP)").GetComponent<TextMeshProUGUI>();
+        TextMeshProUGUI textComponent = this.transform.Find("TextScore").GetComponent<TextMeshProUGUI>();
 
         textComponent.text = "aaaa: " + gameManager.score1.ToString();
     } 
