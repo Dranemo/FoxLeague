@@ -195,7 +195,11 @@ public class GameManager : MonoBehaviour
         Rect acutalRectPlayer2 = playerGen.transform.Find("PlayerCamera").GetComponent<Camera>().rect;
 
         playerGen.transform.Find("PlayerCamera").GetComponent<Camera>().cullingMask &= ~(1 << 7);
-        playerGen.transform.Find("PlayerCamera").GetComponent<Camera>().rect = new Rect(0.5f, acutalRectPlayer2.y, acutalRectPlayer2.width, acutalRectPlayer2.height);
+
+        Rect tempRect = playerGen.transform.Find("PlayerCamera").GetComponent<Camera>().rect;
+        tempRect.x = 0.5f;
+
+        playerGen.transform.Find("PlayerCamera").GetComponent<Camera>().rect = tempRect;
         playerGen.transform.Find("PlayerCamera").tag = "MainCamera";
 
         playerGen.transform.Find("SkinPlayer").gameObject.layer = 7;
