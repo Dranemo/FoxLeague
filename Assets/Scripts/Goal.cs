@@ -8,23 +8,17 @@ public class Goal : MonoBehaviour
     {
         Destroy(GameObject.FindWithTag("Ball"));
     }
+
+
     private void OnTriggerEnter(Collider other)
     {
         if(other.CompareTag("Ball"))
         {
             Debug.Log("goal !");
             other.transform.GetComponent<Rigidbody>().isKinematic = true;
+
+
             GameManager.GetInstance().ResetPositions();
         }
-    }
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }
