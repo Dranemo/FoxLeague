@@ -6,8 +6,10 @@ public class CameraController : MonoBehaviour
 {
     [SerializeField] private float mouseSensitivity = 100f;
     [SerializeField] private Transform playerBody;
+    [SerializeField] private Vector3 cameraBody;
 
     private float xRotationCamera = 0f;
+    bool camInput = false;
 
     void Start()
     {
@@ -26,6 +28,19 @@ public class CameraController : MonoBehaviour
 
             transform.localRotation = Quaternion.Euler(xRotationCamera, 0f, 0f);
             playerBody.Rotate(Vector3.up * mouseX);
+        }
+        camInput = Input.GetButtonDown("CameraView");
+        if (camInput && CompareTag("MainCamera"))
+        {
+            GameObject player = GameObject.FindWithTag("Player");
+            if ((transform.position-player.transform.position).magnitude < 2.1f)
+            {
+                transform.localPosition = cameraBody;
+            }
+            else
+            {
+                transform.localPosition = new Vector3(0,1f,0);
+            }
         }
     }
 }

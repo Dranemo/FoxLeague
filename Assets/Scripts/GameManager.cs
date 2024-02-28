@@ -8,6 +8,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Transform ballPos;
     [SerializeField] private Transform playerPos;
     [SerializeField] private Transform player2Pos;
+    [SerializeField] private Transform cam1;
+    [SerializeField] private Transform cam2;
 
     [SerializeField] public int score1;
     [SerializeField] public int score2;

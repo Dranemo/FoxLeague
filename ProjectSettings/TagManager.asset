@@ -9,6 +9,7 @@ TagManager:
   - Goal1
   - Ball
   - Goal2
+  - MainCamera2
   layers:
   - Default
   - TransparentFX
