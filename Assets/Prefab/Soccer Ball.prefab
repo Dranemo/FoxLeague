@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 5120242766622132040}
   - component: {fileID: 4114848629426335182}
   - component: {fileID: 6685358705351563845}
+  - component: {fileID: 6932783002260221364}
   m_Layer: 0
   m_Name: Soccer Ball
   m_TagString: Untagged
@@ -30,7 +31,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -3.0010467, y: 0.5, z: 3.2623646}
-  m_LocalScale: {x: 10, y: 10, z: 10}
+  m_LocalScale: {x: 20, y: 20, z: 20}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -115,9 +116,9 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4040494823545193322}
   serializedVersion: 4
-  m_Mass: 1
+  m_Mass: 0.05
   m_Drag: 0
-  m_AngularDrag: 0.05
+  m_AngularDrag: 0
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -134,3 +135,16 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &6932783002260221364
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4040494823545193322}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc967d9e54046a041932c92756b55dbc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  forceCollision: 15

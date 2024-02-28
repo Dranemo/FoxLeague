@@ -335,7 +335,7 @@ AudioListener:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 598083840765284072}
-  m_Enabled: 1
+  m_Enabled: 0
 --- !u!114 &7086541725962221787
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -797,8 +797,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3e085d43c8618b478cfed411580a2d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 1000
-  jumpSpeed: 1000
+  speed: 1500
+  jumpSpeed: 800
 --- !u!54 &4206921553541758120
 Rigidbody:
   m_ObjectHideFlags: 0
