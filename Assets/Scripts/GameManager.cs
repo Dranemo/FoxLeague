@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngineInternal;
 using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class GameManager : MonoBehaviour
@@ -19,6 +20,7 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private GameObject playerPrefab;
     [SerializeField] private GameObject ballPrefab;
+    [SerializeField] private GameObject canvaPrefab;
 
 
     [SerializeField, Range(1,2)] private int playerNumber = 2;
@@ -29,7 +31,14 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] public int score1;
     [SerializeField] public int score2;
+
     private static GameManager instance;
+
+    private GameObject ball;
+    private GameObject player;
+    private GameObject player2;
+
+
     public static GameManager GetInstance()
     {
         if (instance)
@@ -45,10 +54,18 @@ public class GameManager : MonoBehaviour
 
 
 
-
     private void Start()
     {
         GenerateTerrain();
+
+        ball = GameObject.FindWithTag("Ball");
+        player = GameObject.FindWithTag("Player");
+        player2 = GameObject.FindWithTag("Player2");
+        if (player2 == null)
+        {
+            player2 = GameObject.FindWithTag("AI");
+        }
+
         ResetPositions();
     }
 
@@ -58,34 +75,27 @@ public class GameManager : MonoBehaviour
     public void ResetPositions()
     {
         //Reset la balle
-        GameObject ball = GameObject.FindWithTag("Ball");
-        ball.transform.GetComponent<Rigidbody>().isKinematic = true;
+        ball.transform.localScale = Vector3.one * 20;
         ball.transform.position = ballPos.transform.position;
-        ball.transform.GetComponent<Rigidbody>().isKinematic = false;
 
         //Reset le joueur 1
-        GameObject player = GameObject.FindWithTag("Player");
-        player.transform.GetComponent<Rigidbody>().isKinematic = true;
-
         player.transform.position = playerPos.transform.position;
         player.transform.LookAt(new Vector3(0, 0, 1));
 
-        player.transform.GetComponent<Rigidbody>().isKinematic = false;
-
 
         //Reset le joueur 2 ou l'IA
-        GameObject player2 = GameObject.FindWithTag("Player2");
-        if(player2 == null)
-        {
-            player2 = GameObject.FindWithTag("AI");
-        }
-        player2.transform.GetComponent<Rigidbody>().isKinematic = true;
-
         player2.transform.position = player2Pos.transform.position;
         player2.transform.LookAt(new Vector3(0, 0, -1));
 
-        player2.transform.GetComponent<Rigidbody>().isKinematic = false;
 
+        allKinetic(false);
+    }
+
+    public void allKinetic(bool booleen)
+    {
+        ball.transform.GetComponent<Rigidbody>().isKinematic = booleen;
+        player.transform.GetComponent<Rigidbody>().isKinematic = booleen;
+        player2.transform.GetComponent<Rigidbody>().isKinematic = booleen;
     }
 
 
@@ -94,6 +104,7 @@ public class GameManager : MonoBehaviour
         GeneratePlayer();
         GenerateBall();
         GenerateRandomObstacle();
+        GenerateOverlay();
     }
 
     private void GenerateRandomObstacle()
@@ -143,7 +154,6 @@ public class GameManager : MonoBehaviour
 
 
 
-            Debug.Log(prefabGenerated);
             positionList.Add(position);
 
 
@@ -188,6 +198,12 @@ public class GameManager : MonoBehaviour
         playerGen.transform.Find("SkinPlayer").gameObject.layer = 6;
         playerGen.transform.Find("ModelPlayer").gameObject.layer = 6;
 
+
+
+
+
+
+
         // Joueur 2
         playerGen = Instantiate(playerPrefab, Vector3.zero, Quaternion.identity);
         playerGen.layer = 7;
@@ -228,6 +244,21 @@ public class GameManager : MonoBehaviour
 
         ballGen = Instantiate(ballPrefab, Vector3.zero, Quaternion.identity);
         ballGen.name = "Ball";
-        ballGen.tag = "Ball";
     }
+
+    private void GenerateOverlay()
+    {
+        GameObject OverlayGen = null;
+
+        OverlayGen = Instantiate(canvaPrefab, Vector3.zero, Quaternion.identity);
+        OverlayGen.name = "Overlay";
+        OverlayGen.layer = 5;
+
+        foreach (Transform childTransform in OverlayGen.transform)
+        {
+            childTransform.gameObject.layer = 5;
+        }
+    }
+
+    
 }

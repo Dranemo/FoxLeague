@@ -25,8 +25,6 @@ public class Ball : MonoBehaviour
 
         if (collision.transform.CompareTag("Player") || collision.transform.CompareTag("Player2"))
         {
-            Debug.Log("collsiion");
-
             Rigidbody playerRb = collision.gameObject.GetComponent<Rigidbody>();
 
 

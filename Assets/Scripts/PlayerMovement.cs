@@ -24,7 +24,6 @@ public class PlayerMovement : MonoBehaviour
         if (collision.transform.CompareTag("Floor"))
         {
             canJump = true;
-            Debug.Log(canJump);
         }
     }
 
@@ -61,7 +60,6 @@ public class PlayerMovement : MonoBehaviour
         if (jumpInput && canJump)
         {
             jumpVector = Vector3.up * jumpSpeed;
-            Debug.Log("pk tu saute pa");
         }
 
 
