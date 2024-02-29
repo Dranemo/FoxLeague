@@ -21,7 +21,10 @@ public class PlayerMovement : MonoBehaviour
     Vector3 jumpVector = Vector3.zero;
     Vector3 jumpBoostVector = Vector3.zero;
 
-
+    public float GetFlyBoost()
+    {
+        return flyBoost;
+    }
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.transform.CompareTag("Floor"))
