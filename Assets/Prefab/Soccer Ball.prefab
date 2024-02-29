@@ -147,4 +147,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc967d9e54046a041932c92756b55dbc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isGoaled: 0
   forceCollision: 15

@@ -759,6 +759,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5606625089796211363}
   - component: {fileID: 9026164462411433855}
+  - component: {fileID: 3642138062445446395}
   - component: {fileID: 4206921553541758120}
   - component: {fileID: 8820672158890393749}
   m_Layer: 0
@@ -800,8 +801,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 1500
   jumpSpeed: 800
-  jumpBoost: 100
+  flyBoost: 100
   flySpeed: 1500
+--- !u!114 &3642138062445446395
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4347224934705731035}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f9e875e35d82774eac30237461865e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerEnum: 0
 --- !u!54 &4206921553541758120
 Rigidbody:
   m_ObjectHideFlags: 0
