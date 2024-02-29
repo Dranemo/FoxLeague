@@ -5,6 +5,7 @@ using UnityEngine;
 public class Ball : MonoBehaviour
 {
     private Rigidbody rb;
+    public bool isGoaled = false;
 
     [SerializeField] private float forceCollision = 10.0f;
 

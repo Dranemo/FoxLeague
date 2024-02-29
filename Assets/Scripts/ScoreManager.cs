@@ -19,13 +19,13 @@ public class ScoreManager : MonoBehaviour
         gameManager = GameManager.GetInstance();
 
         textScoreP1 = this.transform.Find("ScoreP1").GetComponent<TextMeshProUGUI>();
-        textScoreP1.text = "P1 : " + gameManager.score1.ToString();
+        textScoreP1.text = "P2 : " + gameManager.score1.ToString();
 
         textScoreP2 = this.transform.Find("ScoreP2").GetComponent<TextMeshProUGUI>();
-        textScoreP2.text = gameManager.score1.ToString() + " : P2";
-    } 
+        textScoreP2.text = gameManager.score1.ToString() + " : P1";
+    }
 
-    
+
 
     public static ScoreManager GetInstance()
     {
@@ -39,17 +39,17 @@ public class ScoreManager : MonoBehaviour
         }
     }
 
-    private void addScore(int playerId, GameObject ball)
+    public void addScore(int playerId, GameObject ball)
     {
         switch (playerId)
         {
             case 1:
                 gameManager.score2++;
-                textScoreP2.text = gameManager.score1.ToString() + " : P2";
+                textScoreP2.text = gameManager.score2.ToString() + " : P1";
                 break;
             case 2:
                 gameManager.score1++;
-                textScoreP1.text = "P1 : " + gameManager.score1.ToString();
+                textScoreP1.text = "P2 : " + gameManager.score1.ToString();
                 break;
         }
     }
@@ -57,22 +57,26 @@ public class ScoreManager : MonoBehaviour
 
     public IEnumerator Goal(int playerId, GameObject ball)
     {
-        //Mettre tout en pause
-        gameManager.allKinetic(true);
-
-
-
-
-        //
-        for (float i = 1; i >= 0; i -= 0.025f)
+        if (!ball.GetComponent<Ball>().isGoaled)
         {
-            ball.transform.localScale *= i;
-            yield return new WaitForSeconds(.05f);
+            ball.GetComponent<Ball>().isGoaled = true;
+            //Mettre tout en pause
+            gameManager.allKinetic(true);
+
+
+
+
+            //
+            for (float i = 1; i >= 0; i -= 0.025f)
+            {
+                ball.transform.localScale *= i;
+                yield return new WaitForSeconds(.05f);
+            }
+
+
+            gameManager.ResetPositions();
+
+            addScore(playerId, ball);
         }
-
-
-        gameManager.ResetPositions();
-
-        ScoreManager.GetInstance().addScore(playerId, ball);
     }
 }

@@ -15,7 +15,6 @@ public class PlayerMovement : MonoBehaviour
 
     Vector3 movementX;
     Vector3 movementZ;
-    Vector3 rotation;
     Vector3 jumpVector = Vector3.zero;
 
 
@@ -40,12 +39,12 @@ public class PlayerMovement : MonoBehaviour
         bool jumpInput = false;
 
 
-        if (gameObject.CompareTag("Player2") || gameObject.CompareTag("AI"))
+        if (gameObject.GetComponent<Player>().GetPlayerEnum() == Player.PlayerEnum.player2 || gameObject.GetComponent<Player>().GetPlayerEnum() == Player.PlayerEnum.AI)
         {
             //horizontalInput = Input.GetAxis("Horizontal2");
             //verticalInput = Input.GetAxis("Vertical2");
         }
-        else
+        else if (gameObject.GetComponent<Player>().GetPlayerEnum() == Player.PlayerEnum.player1)
         {
             horizontalInput = Input.GetAxis("Horizontal");
             verticalInput = Input.GetAxis("Vertical");
@@ -61,10 +60,6 @@ public class PlayerMovement : MonoBehaviour
         {
             jumpVector = Vector3.up * jumpSpeed;
         }
-
-
-
-
     }
 
     private void FixedUpdate()

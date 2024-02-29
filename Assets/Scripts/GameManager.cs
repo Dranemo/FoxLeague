@@ -29,8 +29,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Transform cam1;
     [SerializeField] private Transform cam2;
 
-    [SerializeField] public int score1;
-    [SerializeField] public int score2;
+    [SerializeField] public int score1 = 0;
+    [SerializeField] public int score2 = 0;
 
     private static GameManager instance;
 
@@ -58,14 +58,14 @@ public class GameManager : MonoBehaviour
     {
         GenerateTerrain();
 
-        ball = GameObject.FindWithTag("Ball");
+        ball = FindObjectOfType<Ball>().gameObject;
+
         player = GameObject.FindWithTag("Player");
         player2 = GameObject.FindWithTag("Player2");
         if (player2 == null)
         {
             player2 = GameObject.FindWithTag("AI");
         }
-
         ResetPositions();
     }
 
@@ -77,6 +77,7 @@ public class GameManager : MonoBehaviour
         //Reset la balle
         ball.transform.localScale = Vector3.one * 20;
         ball.transform.position = ballPos.transform.position;
+        ball.GetComponent<Ball>().isGoaled = false;
 
         //Reset le joueur 1
         player.transform.position = playerPos.transform.position;
@@ -188,52 +189,23 @@ public class GameManager : MonoBehaviour
 
         // Joueur 1
         playerGen = Instantiate(playerPrefab, Vector3.zero, Quaternion.identity);
-        playerGen.name = "Player1";
-        playerGen.layer = 6;
+        playerGen.GetComponent<Player>().SetPlayerEnum(Player.PlayerEnum.player1);
         playerGen.tag = "Player";
-
-        playerGen.transform.Find("PlayerCamera").GetComponent<Camera>().cullingMask &= ~(1 << 6);
-        playerGen.transform.Find("PlayerCamera").tag = "MainCamera";
-
-        playerGen.transform.Find("SkinPlayer").gameObject.layer = 6;
-        playerGen.transform.Find("ModelPlayer").gameObject.layer = 6;
-
-
-
-
-
 
 
         // Joueur 2
         playerGen = Instantiate(playerPrefab, Vector3.zero, Quaternion.identity);
-        playerGen.layer = 7;
-
-        Rect acutalRectPlayer2 = playerGen.transform.Find("PlayerCamera").GetComponent<Camera>().rect;
-
-        playerGen.transform.Find("PlayerCamera").GetComponent<Camera>().cullingMask &= ~(1 << 7);
-
-        Rect tempRect = playerGen.transform.Find("PlayerCamera").GetComponent<Camera>().rect;
-        tempRect.x = 0.5f;
-
-        playerGen.transform.Find("PlayerCamera").GetComponent<Camera>().rect = tempRect;
-        playerGen.transform.Find("PlayerCamera").tag = "MainCamera";
-
-        playerGen.transform.Find("SkinPlayer").gameObject.layer = 7;
-        playerGen.transform.Find("ModelPlayer").gameObject.layer = 7;
-
-
-
         switch (playerNumber)
         {
             case 1:
-                playerGen.name = "AI";
-                playerGen.tag = "AI";
+                playerGen.GetComponent<Player>().SetPlayerEnum(Player.PlayerEnum.player2);
+                playerGen.tag = "Player2";
                 break;
 
 
             case 2:
-                playerGen.name = "Player2";
-                playerGen.tag = "Player2";
+                playerGen.GetComponent<Player>().SetPlayerEnum(Player.PlayerEnum.AI);
+                playerGen.tag = "AI";
                 break;
         }
     }
