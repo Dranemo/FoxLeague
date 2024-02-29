@@ -70,12 +70,9 @@ public class PlayerMovement : MonoBehaviour
             jumpBoostVector = Vector3.up * flySpeed;
         }
 
-        if (canJump)
+        if (canJump && flyBoost < 100)
         {
-            if (flyBoost < 100)
-            {
-                flyBoost += 100 * Time.deltaTime;
-            }
+            flyBoost += 100 * Time.deltaTime;
         }
 
     }
