@@ -17,4 +17,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/scene_melvin.unity
     guid: dce8dddb2ba9e53488b1444c309cf803
+  - enabled: 1
+    path: Assets/Scenes/Options_Menu.unity
+    guid: 70638a6efa10cbf469b4f48c4c6edcec
   m_configObjects: {}
