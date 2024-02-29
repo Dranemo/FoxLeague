@@ -8,4 +8,13 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/SceneYanael.unity
     guid: 99c9720ab356a0642a771bea13969a05
+  - enabled: 1
+    path: Assets/Scenes/Main_Menu.unity
+    guid: 72171c04d5f01a141b73f9d127bffd11
+  - enabled: 1
+    path: Assets/Scenes/Main_Scene.unity
+    guid: 1eaf6e3c8d9dd0746b693187f7c7c287
+  - enabled: 1
+    path: Assets/Scenes/scene_melvin.unity
+    guid: dce8dddb2ba9e53488b1444c309cf803
   m_configObjects: {}
