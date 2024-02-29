@@ -1,15 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngineInternal;
 using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class GameManager : MonoBehaviour
 {
-    // Start is called before the first frame update
-    [SerializeField] private Transform ballPos;
-    [SerializeField] private Transform playerPos;
-    [SerializeField] private Transform player2Pos;
+    private Transform ballPos;
+    private Transform playerPos;
+    private Transform player2Pos;
+    private Transform goal1Pos;
+    private Transform goal2Pos;
+
+    private GameObject scene; 
 
 
     [SerializeField] private GameObject birchTree;
@@ -21,6 +25,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject playerPrefab;
     [SerializeField] private GameObject ballPrefab;
     [SerializeField] private GameObject canvaPrefab;
+    [SerializeField] private GameObject goalPrefab;
 
 
     [SerializeField, Range(1,2)] private int playerNumber = 2;
@@ -56,6 +61,17 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        scene = GameObject.Find("Scene");
+
+        ballPos = scene.transform.Find("BallStartPosition");
+        playerPos = scene.transform.Find("PlayerStartPosition");
+        player2Pos = scene.transform.Find("Player2StartPosition");
+        goal1Pos = scene.transform.Find("GoalStartPosition");
+        goal2Pos = scene.transform.Find("Goal2StartPosition");
+
+        Debug.Log(goal1Pos.position + " " + goal2Pos.position);
+
+
         GenerateTerrain();
 
         ball = FindObjectOfType<Ball>().gameObject;
@@ -66,6 +82,8 @@ public class GameManager : MonoBehaviour
         {
             player2 = GameObject.FindWithTag("AI");
         }
+
+
         ResetPositions();
     }
 
@@ -82,11 +100,13 @@ public class GameManager : MonoBehaviour
         //Reset le joueur 1
         player.transform.position = playerPos.transform.position;
         player.transform.LookAt(new Vector3(0, 0, 1));
+        player.GetComponent<PlayerMovement>().SetFlyBoost(100);
 
 
         //Reset le joueur 2 ou l'IA
         player2.transform.position = player2Pos.transform.position;
         player2.transform.LookAt(new Vector3(0, 0, -1));
+        player2.GetComponent<PlayerMovement>().SetFlyBoost(100);
 
 
         allKinetic(false);
@@ -102,6 +122,7 @@ public class GameManager : MonoBehaviour
 
     private void GenerateTerrain()
     {
+        GenerateGoal();
         GeneratePlayer();
         GenerateBall();
         GenerateRandomObstacle();
@@ -128,58 +149,87 @@ public class GameManager : MonoBehaviour
             while (!positionCorrect)
             {
                 position.Clear();
-                position.Add(Random.Range(-24, 25));
-                position.Add(Random.Range(-24, 25));
+                position.Add(Random.Range(-24, 25)); // X
+                position.Add(Random.Range(-35, 36)); // Z
 
-                if (positionList.Count > 0)
+
+                // Verif que c'est pas dans un truc qui spawn
+                bool PositionOnTheWay = false;
+
+                if ((position[0] < ballPos.position.x + 5 && position[0] > ballPos.position.x - 5) && (position[1] < ballPos.position.y + 5 && position[1] > ballPos.position.y - 5))
                 {
-                    bool positionCheckedGood = true; // Vérifier s'il n'y a pas d'objet à sa place ou dans un range
-                    foreach (List<int> positionAlr in positionList)
+                    PositionOnTheWay = true;
+                    positionCorrect = true;
+                }
+                else if((position[0] < playerPos.position.x + 5 && position[0] > playerPos.position.x - 5) && (position[1] < playerPos.position.y + 5 && position[1] > playerPos.position.y - 5))
+                {
+                    PositionOnTheWay = true;
+                    positionCorrect = true;
+                }
+                else if ((position[0] < player2Pos.position.x + 5 && position[0] > player2Pos.position.x - 5) && (position[1] < player2Pos.position.y + 5 && position[1] > player2Pos.position.y - 5))
+                {
+                    PositionOnTheWay = true;
+                    positionCorrect = true;
+                }
+
+
+
+                if (!PositionOnTheWay)
+                {
+                    if (positionList.Count > 0)
                     {
-                        if ((position[0] < positionAlr[0] + 5 && position[0] > positionAlr[0] - 5) && (position[1] < positionAlr[1] + 5 && position[1] > positionAlr[1] - 5))
+                        bool positionCheckedGood = true; // Vérifier s'il n'y a pas d'objet à sa place ou dans un range
+                        foreach (List<int> positionAlr in positionList)
                         {
-                            positionCheckedGood = false;
+                            if ((position[0] < positionAlr[0] + 5 && position[0] > positionAlr[0] - 5) && (position[1] < positionAlr[1] + 5 && position[1] > positionAlr[1] - 5))
+                            {
+                                positionCheckedGood = false;
+                            }
+                        }
+
+                        if (positionCheckedGood)
+                        {
+                            positionCorrect = true;
                         }
                     }
-
-                    if (positionCheckedGood)
+                    else
                     {
                         positionCorrect = true;
                     }
+
+
+
+                    positionList.Add(position);
+
+
+                    GameObject itemCreated = null;
+                    switch (prefabGenerated)
+                    {
+                        case 0: // Birch tree
+                            itemCreated = Instantiate(birchTree, new Vector3(positionList[i][0], 0, positionList[i][1]), Quaternion.Euler(0, Random.Range(0, 360), 0));
+                            break;
+                        case 1: // Oak tree
+                            itemCreated = Instantiate(oakTree, new Vector3(positionList[i][0], 0, positionList[i][1]), Quaternion.Euler(0, Random.Range(0, 360), 0));
+                            break;
+                        case 2: // Rock01
+                            itemCreated = Instantiate(rock01, new Vector3(positionList[i][0], 0, positionList[i][1]), Quaternion.Euler(0, Random.Range(0, 360), 0));
+                            break;
+                        case 3: // Rock02
+                            itemCreated = Instantiate(rock02, new Vector3(positionList[i][0], 0, positionList[i][1]), Quaternion.Euler(0, Random.Range(0, 360), 0));
+                            break;
+                        case 4: // Rock03
+                            itemCreated = Instantiate(rock03, new Vector3(positionList[i][0], 0, positionList[i][1]), Quaternion.Euler(0, Random.Range(0, 360), 0));
+                            break;
+                    }
+
+                    itemCreated.name = "item" + i;
+                    itemCreated.transform.parent = obstacles.transform;
                 }
-                else
-                {
-                    positionCorrect = true;
-                }
+
+
+                Debug.Log(i);
             }
-
-
-
-            positionList.Add(position);
-
-
-            GameObject itemCreated = null;
-            switch (prefabGenerated)
-            {
-                case 0: // Birch tree
-                    itemCreated = Instantiate(birchTree, new Vector3(positionList[i][0], 0, positionList[i][1]), Quaternion.Euler(0, Random.Range(0, 360), 0));
-                    break;
-                case 1: // Oak tree
-                    itemCreated = Instantiate(oakTree, new Vector3(positionList[i][0], 0, positionList[i][1]), Quaternion.Euler(0, Random.Range(0, 360), 0));
-                    break;
-                case 2: // Rock01
-                    itemCreated = Instantiate(rock01, new Vector3(positionList[i][0], 0, positionList[i][1]), Quaternion.Euler(0, Random.Range(0, 360), 0));
-                    break;
-                case 3: // Rock02
-                    itemCreated = Instantiate(rock02, new Vector3(positionList[i][0], 0, positionList[i][1]), Quaternion.Euler(0, Random.Range(0, 360), 0));
-                    break;
-                case 4: // Rock03
-                    itemCreated = Instantiate(rock03, new Vector3(positionList[i][0], 0, positionList[i][1]), Quaternion.Euler(0, Random.Range(0, 360), 0));
-                    break;
-            }
-
-            itemCreated.name = "item" + i;
-            itemCreated.transform.parent = obstacles.transform;
+            
         }
     }
 
@@ -232,5 +282,16 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    
+    private void GenerateGoal()
+    {
+        GameObject goalGen = null;
+
+        goalGen = Instantiate(goalPrefab, goal1Pos.position, Quaternion.identity);
+        goalGen.name = "Goal1";
+        goalGen.GetComponent<Goal>().SetGoal(Goal.PlayerGoal.Player_1);
+
+        goalGen = Instantiate(goalPrefab, goal2Pos.position, Quaternion.identity);
+        goalGen.name = "Goal2";
+        goalGen.GetComponent<Goal>().SetGoal(Goal.PlayerGoal.Player_2);
+    }
 }
