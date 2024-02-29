@@ -44,12 +44,12 @@ public class ScoreManager : MonoBehaviour
         switch (playerId)
         {
             case 1:
-                gameManager.score2++;
-                textScoreP2.text = gameManager.score2.ToString() + " : P1";
-                break;
-            case 2:
                 gameManager.score1++;
                 textScoreP1.text = "P2 : " + gameManager.score1.ToString();
+                break;
+            case 2:
+                gameManager.score2++;
+                textScoreP2.text = gameManager.score2.ToString() + " : P1";
                 break;
         }
     }
