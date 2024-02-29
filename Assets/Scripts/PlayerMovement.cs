@@ -8,6 +8,8 @@ public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] private float speed = 1000f; 
     [SerializeField] private float jumpSpeed = 100.0f;
+    [SerializeField] private float jumpBoost = 100.0f;
+    [SerializeField] private float flySpeed = 100.0f;
     private bool canJump = false;
 
 
@@ -17,6 +19,7 @@ public class PlayerMovement : MonoBehaviour
     Vector3 movementZ;
     Vector3 rotation;
     Vector3 jumpVector = Vector3.zero;
+    Vector3 jumpBoostVector = Vector3.zero;
 
 
     private void OnCollisionEnter(Collision collision)
@@ -62,8 +65,10 @@ public class PlayerMovement : MonoBehaviour
             jumpVector = Vector3.up * jumpSpeed;
         }
 
-
-
+        if (!canJump && jumpInput)
+        {
+            jumpBoostVector = Vector3.up * flySpeed;
+        }
 
     }
 
@@ -78,6 +83,12 @@ public class PlayerMovement : MonoBehaviour
             jumpVector = Vector3.zero;
             canJump = false;
         }
+        if (jumpBoostVector != Vector3.zero)
+        {
+            rb.AddForce(jumpBoostVector, ForceMode.Force);
+            jumpBoostVector = Vector3.zero;
+        }
+
     }
 }
 
