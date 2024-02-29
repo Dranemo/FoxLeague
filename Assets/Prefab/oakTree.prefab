@@ -63,5 +63,65 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 100000, guid: ccafc2ea8bec52841ac2b9fd34238310,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1031385769443506258}
+    - targetCorrespondingSourceObject: {fileID: 100000, guid: ccafc2ea8bec52841ac2b9fd34238310,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6190446057475428025}
   m_SourcePrefab: {fileID: 100100000, guid: ccafc2ea8bec52841ac2b9fd34238310, type: 3}
+--- !u!1 &4652665146812649707 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 100000, guid: ccafc2ea8bec52841ac2b9fd34238310,
+    type: 3}
+  m_PrefabInstance: {fileID: 4652665146812552779}
+  m_PrefabAsset: {fileID: 0}
+--- !u!136 &1031385769443506258
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4652665146812649707}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 1
+  m_Height: 10.707431
+  m_Direction: 1
+  m_Center: {x: 0, y: 5.1970277, z: 0}
+--- !u!136 &6190446057475428025
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4652665146812649707}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 4.5
+  m_Height: 14
+  m_Direction: 2
+  m_Center: {x: -0.055533886, y: 7.9236937, z: -0.7}
