@@ -801,6 +801,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 1500
   jumpSpeed: 800
+  flyBoost: 100
+  flySpeed: 1500
 --- !u!114 &3642138062445446395
 MonoBehaviour:
   m_ObjectHideFlags: 0
