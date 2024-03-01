@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngineInternal;
@@ -29,6 +30,7 @@ public class GameManager : MonoBehaviour
 
 
     [SerializeField, Range(1,2)] private int playerNumber = 2;
+    [SerializeField] private int numberObstacles = 10;
 
 
     [SerializeField] private Transform cam1;
@@ -134,102 +136,107 @@ public class GameManager : MonoBehaviour
         //instancier un gameobject vide
         GameObject obstacles = new GameObject("Obstacles");
 
+        //Creer une liste de toutes les positions des obstacles
+        List<List<float>> positionList = new();
+
+        //Creer une liste avec toutes les positions des start des items
+        List<List<float>> listAlreadyItems = new();
+        List<float> listAlreadyOneItem = new();
 
 
-        List<List<int>> positionList = new List<List<int>>();
+        listAlreadyOneItem.Add(ballPos.position.x);
+        listAlreadyOneItem.Add(ballPos.position.z);
+        listAlreadyItems.Add(listAlreadyOneItem);
 
-        for (int i = 0; i < 10; i++)
+        listAlreadyOneItem.Add(playerPos.position.x);
+        listAlreadyOneItem.Add(playerPos.position.z);
+        listAlreadyItems.Add(listAlreadyOneItem);
+
+        listAlreadyOneItem.Add(player2Pos.position.x);
+        listAlreadyOneItem.Add(player2Pos.position.z);
+        listAlreadyItems.Add(listAlreadyOneItem);
+
+
+
+        // début de la boucle de générations de tous les items
+        for (int i = 0; i < numberObstacles && i < 50; i++)
         {
-            int prefabGenerated = Random.Range(0, 5); // Quel prefab ?
-
-
-            List<int> position = new List<int>();
+            List<float> position = new List<float>();
 
             bool positionCorrect = false; // Verifier si on peut le faire spawn
             while (!positionCorrect)
             {
                 position.Clear();
                 position.Add(Random.Range(-24, 25)); // X
-                position.Add(Random.Range(-35, 36)); // Z
+                position.Add(Random.Range(-40, 41)); // Z
 
 
-                // Verif que c'est pas dans un truc qui spawn
-                bool PositionOnTheWay = false;
+                //Check si c'est pas sur un point de spawn
+                bool spawnPositionItem = checkPosition(listAlreadyItems, position);
 
-                if ((position[0] < ballPos.position.x + 5 && position[0] > ballPos.position.x - 5) && (position[1] < ballPos.position.y + 5 && position[1] > ballPos.position.y - 5))
+                if(spawnPositionItem)
                 {
-                    PositionOnTheWay = true;
-                    positionCorrect = true;
-                }
-                else if((position[0] < playerPos.position.x + 5 && position[0] > playerPos.position.x - 5) && (position[1] < playerPos.position.y + 5 && position[1] > playerPos.position.y - 5))
-                {
-                    PositionOnTheWay = true;
-                    positionCorrect = true;
-                }
-                else if ((position[0] < player2Pos.position.x + 5 && position[0] > player2Pos.position.x - 5) && (position[1] < player2Pos.position.y + 5 && position[1] > player2Pos.position.y - 5))
-                {
-                    PositionOnTheWay = true;
-                    positionCorrect = true;
-                }
+                    //check s'il n'y a pas deja un obstacle
+                    bool canSpawn = checkPosition(positionList, position);
 
-
-
-                if (!PositionOnTheWay)
-                {
-                    if (positionList.Count > 0)
-                    {
-                        bool positionCheckedGood = true; // Vérifier s'il n'y a pas d'objet à sa place ou dans un range
-                        foreach (List<int> positionAlr in positionList)
-                        {
-                            if ((position[0] < positionAlr[0] + 5 && position[0] > positionAlr[0] - 5) && (position[1] < positionAlr[1] + 5 && position[1] > positionAlr[1] - 5))
-                            {
-                                positionCheckedGood = false;
-                            }
-                        }
-
-                        if (positionCheckedGood)
-                        {
-                            positionCorrect = true;
-                        }
-                    }
-                    else
+                    if (canSpawn)
                     {
                         positionCorrect = true;
                     }
-
-
-
-                    positionList.Add(position);
-
-
-                    GameObject itemCreated = null;
-                    switch (prefabGenerated)
-                    {
-                        case 0: // Birch tree
-                            itemCreated = Instantiate(birchTree, new Vector3(positionList[i][0], 0, positionList[i][1]), Quaternion.Euler(0, Random.Range(0, 360), 0));
-                            break;
-                        case 1: // Oak tree
-                            itemCreated = Instantiate(oakTree, new Vector3(positionList[i][0], 0, positionList[i][1]), Quaternion.Euler(0, Random.Range(0, 360), 0));
-                            break;
-                        case 2: // Rock01
-                            itemCreated = Instantiate(rock01, new Vector3(positionList[i][0], 0, positionList[i][1]), Quaternion.Euler(0, Random.Range(0, 360), 0));
-                            break;
-                        case 3: // Rock02
-                            itemCreated = Instantiate(rock02, new Vector3(positionList[i][0], 0, positionList[i][1]), Quaternion.Euler(0, Random.Range(0, 360), 0));
-                            break;
-                        case 4: // Rock03
-                            itemCreated = Instantiate(rock03, new Vector3(positionList[i][0], 0, positionList[i][1]), Quaternion.Euler(0, Random.Range(0, 360), 0));
-                            break;
-                    }
-
-                    itemCreated.name = "item" + i;
-                    itemCreated.transform.parent = obstacles.transform;
                 }
-
-
-                Debug.Log(i);
             }
-            
+
+            // Ajouter à la liste des obstacles
+            positionList.Add(position);
+
+
+            //Instentier l'item
+            GameObject itemCreated = null;
+
+            int prefabGenerated = Random.Range(0, 5); // Quel prefab ?
+            itemCreated = Instantiate(GetPrefab(prefabGenerated), new Vector3(positionList[i][0], 0, positionList[i][1]), Quaternion.Euler(0, Random.Range(0, 360), 0));
+            itemCreated.name = "item" + i;
+            itemCreated.transform.parent = obstacles.transform;
+        }
+
+        Debug.Log(positionList.Count);
+
+
+
+
+
+        GameObject GetPrefab(int prefabIndex)
+        {
+            switch (prefabIndex)
+            {
+                case 0: // Birch tree
+                    return birchTree;
+                case 1: // Oak tree
+                    return oakTree;
+                case 2: // Rock01
+                    return rock01;
+                case 3: // Rock02
+                    return rock02;
+                case 4: // Rock03
+                    return rock03;
+                default:
+                    return null;
+            }
+        }
+
+        bool checkPosition(List<List<float>> list, List<float> newList)
+        {
+            bool temp = true;
+
+            foreach (List<float> item in list)
+            {
+                if ((newList[0] < item[0] + 7 && newList[0] > item[0] - 7) && (newList[1] < item[1] + 7 && newList[1] > item[1] - 7))
+                {
+                    temp = false;
+                }
+            }
+
+            return temp;
         }
     }
 
