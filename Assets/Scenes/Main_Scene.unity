@@ -223,6 +223,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e085a6a9b37c1d048952409f793616b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerGoal: 0
 --- !u!65 &290011826
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -601,6 +602,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e085a6a9b37c1d048952409f793616b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerGoal: 0
 --- !u!65 &1809252871
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -725,7 +727,7 @@ MonoBehaviour:
   rock01: {fileID: 5121581292400340774, guid: 0d1e5e382cfaac848b92e608e971d94d, type: 3}
   rock02: {fileID: 9119850938233950027, guid: 32b11df59a9128c4b88e765ee7f0274c, type: 3}
   rock03: {fileID: 6550251630457205905, guid: d52d542fe08752c42952c04854d8a33c, type: 3}
-  playerPrefab: {fileID: 4347224934705731035, guid: 8d888372f5137214a9bd2eb9dd25b2ba,
+  playerPrefab: {fileID: 3115044124669147887, guid: 8abc6602ebebe8049b23ed8678c589d6,
     type: 3}
   ballPrefab: {fileID: 4040494823545193322, guid: f7f1cab32f511944bbc83c30b6319de9,
     type: 3}

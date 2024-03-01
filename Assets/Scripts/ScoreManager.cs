@@ -46,14 +46,21 @@ public class ScoreManager : MonoBehaviour
             case 1:
                 gameManager.score1++;
                 textScoreP1.text = "P2 : " + gameManager.score1.ToString();
+                if (gameManager.score1>=2)
+                {
+                    SceneManagerScript.LoadScene("Main_Menu");
+                }
                 break;
             case 2:
                 gameManager.score2++;
                 textScoreP2.text = gameManager.score2.ToString() + " : P1";
+                if (gameManager.score2 >= 2)
+                {
+                    SceneManagerScript.LoadScene("Main_Menu");
+                }
                 break;
         }
     }
-
 
     public IEnumerator Goal(int playerId, GameObject ball)
     {

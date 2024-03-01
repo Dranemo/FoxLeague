@@ -182,7 +182,6 @@ public class GameManager : MonoBehaviour
             itemCreated.transform.parent = obstacles.transform;
         }
     }
-
     private void GeneratePlayer()
     {
         GameObject playerGen = null;
