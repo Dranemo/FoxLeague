@@ -3,6 +3,7 @@ using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class ScoreManager : MonoBehaviour
 {
@@ -48,7 +49,9 @@ public class ScoreManager : MonoBehaviour
                 textScoreP1.text = "P2 : " + gameManager.score1.ToString();
                 if (gameManager.score1>=2)
                 {
-                    SceneManagerScript.LoadScene("Main_Menu");
+                    Cursor.lockState = CursorLockMode.None;
+                    SceneManager.LoadScene("Main_Menu");
+                    Cursor.visible = true;
                 }
                 break;
             case 2:
@@ -56,7 +59,9 @@ public class ScoreManager : MonoBehaviour
                 textScoreP2.text = gameManager.score2.ToString() + " : P1";
                 if (gameManager.score2 >= 2)
                 {
-                    SceneManagerScript.LoadScene("Main_Menu");
+                    Cursor.lockState = CursorLockMode.None;
+                    Cursor.visible = true;
+                    SceneManager.LoadScene("Main_Menu");
                 }
                 break;
         }
