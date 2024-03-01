@@ -718,9 +718,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 64a5560de166acf468678b1f1751e2d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ballPos: {fileID: 1683543583}
-  playerPos: {fileID: 1738732895}
-  player2Pos: {fileID: 970582168}
   birchTree: {fileID: 1140558020721271136, guid: f6149fdb55599d04a9273d824e86646c,
     type: 3}
   oakTree: {fileID: 4652665146812649707, guid: e19b94b8b4f3c5643a456f274da80b5b, type: 3}
@@ -733,7 +730,10 @@ MonoBehaviour:
     type: 3}
   canvaPrefab: {fileID: 7144646545887268541, guid: 8bd1ed0822a06e1479f71588f87455b7,
     type: 3}
+  goalPrefab: {fileID: 8872423478649563501, guid: ec983b8a225c85d4198ed4bfcb8320a2,
+    type: 3}
   playerNumber: 1
+  numberObstacles: 10
   cam1: {fileID: 0}
   cam2: {fileID: 0}
   score1: 0
