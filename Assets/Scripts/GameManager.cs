@@ -1,15 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngineInternal;
 using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class GameManager : MonoBehaviour
 {
-    // Start is called before the first frame update
-    [SerializeField] private Transform ballPos;
-    [SerializeField] private Transform playerPos;
-    [SerializeField] private Transform player2Pos;
+    private Transform ballPos;
+    private Transform playerPos;
+    private Transform player2Pos;
+    private Transform goal1Pos;
+    private Transform goal2Pos;
+
+    private GameObject scene; 
 
 
     [SerializeField] private GameObject birchTree;
@@ -21,9 +26,11 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject playerPrefab;
     [SerializeField] private GameObject ballPrefab;
     [SerializeField] private GameObject canvaPrefab;
+    [SerializeField] private GameObject goalPrefab;
 
 
     [SerializeField, Range(1,2)] private int playerNumber = 2;
+    [SerializeField] private int numberObstacles = 10;
 
 
     [SerializeField] private Transform cam1;
@@ -56,6 +63,17 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        scene = GameObject.Find("Scene");
+
+        ballPos = scene.transform.Find("BallStartPosition");
+        playerPos = scene.transform.Find("PlayerStartPosition");
+        player2Pos = scene.transform.Find("Player2StartPosition");
+        goal1Pos = scene.transform.Find("GoalStartPosition");
+        goal2Pos = scene.transform.Find("Goal2StartPosition");
+
+        Debug.Log(goal1Pos.position + " " + goal2Pos.position);
+
+
         GenerateTerrain();
 
         ball = FindObjectOfType<Ball>().gameObject;
@@ -66,6 +84,8 @@ public class GameManager : MonoBehaviour
         {
             player2 = GameObject.FindWithTag("AI");
         }
+
+
         ResetPositions();
     }
 
@@ -82,11 +102,13 @@ public class GameManager : MonoBehaviour
         //Reset le joueur 1
         player.transform.position = playerPos.transform.position;
         player.transform.LookAt(new Vector3(0, 0, 1));
+        player.GetComponent<PlayerMovement>().SetFlyBoost(100);
 
 
         //Reset le joueur 2 ou l'IA
         player2.transform.position = player2Pos.transform.position;
         player2.transform.LookAt(new Vector3(0, 0, -1));
+        player2.GetComponent<PlayerMovement>().SetFlyBoost(100);
 
 
         allKinetic(false);
@@ -102,6 +124,7 @@ public class GameManager : MonoBehaviour
 
     private void GenerateTerrain()
     {
+        GenerateGoal();
         GeneratePlayer();
         GenerateBall();
         GenerateRandomObstacle();
@@ -113,73 +136,107 @@ public class GameManager : MonoBehaviour
         //instancier un gameobject vide
         GameObject obstacles = new GameObject("Obstacles");
 
+        //Creer une liste de toutes les positions des obstacles
+        List<List<float>> positionList = new();
+
+        //Creer une liste avec toutes les positions des start des items
+        List<List<float>> listAlreadyItems = new();
+        List<float> listAlreadyOneItem = new();
 
 
-        List<List<int>> positionList = new List<List<int>>();
+        listAlreadyOneItem.Add(ballPos.position.x);
+        listAlreadyOneItem.Add(ballPos.position.z);
+        listAlreadyItems.Add(listAlreadyOneItem);
 
-        for (int i = 0; i < 10; i++)
+        listAlreadyOneItem.Add(playerPos.position.x);
+        listAlreadyOneItem.Add(playerPos.position.z);
+        listAlreadyItems.Add(listAlreadyOneItem);
+
+        listAlreadyOneItem.Add(player2Pos.position.x);
+        listAlreadyOneItem.Add(player2Pos.position.z);
+        listAlreadyItems.Add(listAlreadyOneItem);
+
+
+
+        // début de la boucle de générations de tous les items
+        for (int i = 0; i < numberObstacles && i < 50; i++)
         {
-            int prefabGenerated = Random.Range(0, 5); // Quel prefab ?
-
-
-            List<int> position = new List<int>();
+            List<float> position = new List<float>();
 
             bool positionCorrect = false; // Verifier si on peut le faire spawn
             while (!positionCorrect)
             {
                 position.Clear();
-                position.Add(Random.Range(-24, 25));
-                position.Add(Random.Range(-24, 25));
+                position.Add(Random.Range(-24, 25)); // X
+                position.Add(Random.Range(-40, 41)); // Z
 
-                if (positionList.Count > 0)
+
+                //Check si c'est pas sur un point de spawn
+                bool spawnPositionItem = checkPosition(listAlreadyItems, position);
+
+                if(spawnPositionItem)
                 {
-                    bool positionCheckedGood = true; // Vérifier s'il n'y a pas d'objet à sa place ou dans un range
-                    foreach (List<int> positionAlr in positionList)
-                    {
-                        if ((position[0] < positionAlr[0] + 5 && position[0] > positionAlr[0] - 5) && (position[1] < positionAlr[1] + 5 && position[1] > positionAlr[1] - 5))
-                        {
-                            positionCheckedGood = false;
-                        }
-                    }
+                    //check s'il n'y a pas deja un obstacle
+                    bool canSpawn = checkPosition(positionList, position);
 
-                    if (positionCheckedGood)
+                    if (canSpawn)
                     {
                         positionCorrect = true;
                     }
                 }
-                else
-                {
-                    positionCorrect = true;
-                }
             }
 
-
-
+            // Ajouter à la liste des obstacles
             positionList.Add(position);
 
 
+            //Instentier l'item
             GameObject itemCreated = null;
-            switch (prefabGenerated)
-            {
-                case 0: // Birch tree
-                    itemCreated = Instantiate(birchTree, new Vector3(positionList[i][0], 0, positionList[i][1]), Quaternion.Euler(0, Random.Range(0, 360), 0));
-                    break;
-                case 1: // Oak tree
-                    itemCreated = Instantiate(oakTree, new Vector3(positionList[i][0], 0, positionList[i][1]), Quaternion.Euler(0, Random.Range(0, 360), 0));
-                    break;
-                case 2: // Rock01
-                    itemCreated = Instantiate(rock01, new Vector3(positionList[i][0], 0, positionList[i][1]), Quaternion.Euler(0, Random.Range(0, 360), 0));
-                    break;
-                case 3: // Rock02
-                    itemCreated = Instantiate(rock02, new Vector3(positionList[i][0], 0, positionList[i][1]), Quaternion.Euler(0, Random.Range(0, 360), 0));
-                    break;
-                case 4: // Rock03
-                    itemCreated = Instantiate(rock03, new Vector3(positionList[i][0], 0, positionList[i][1]), Quaternion.Euler(0, Random.Range(0, 360), 0));
-                    break;
-            }
 
+            int prefabGenerated = Random.Range(0, 5); // Quel prefab ?
+            itemCreated = Instantiate(GetPrefab(prefabGenerated), new Vector3(positionList[i][0], 0, positionList[i][1]), Quaternion.Euler(0, Random.Range(0, 360), 0));
             itemCreated.name = "item" + i;
             itemCreated.transform.parent = obstacles.transform;
+        }
+
+        Debug.Log(positionList.Count);
+
+
+
+
+
+        GameObject GetPrefab(int prefabIndex)
+        {
+            switch (prefabIndex)
+            {
+                case 0: // Birch tree
+                    return birchTree;
+                case 1: // Oak tree
+                    return oakTree;
+                case 2: // Rock01
+                    return rock01;
+                case 3: // Rock02
+                    return rock02;
+                case 4: // Rock03
+                    return rock03;
+                default:
+                    return null;
+            }
+        }
+
+        bool checkPosition(List<List<float>> list, List<float> newList)
+        {
+            bool temp = true;
+
+            foreach (List<float> item in list)
+            {
+                if ((newList[0] < item[0] + 7 && newList[0] > item[0] - 7) && (newList[1] < item[1] + 7 && newList[1] > item[1] - 7))
+                {
+                    temp = false;
+                }
+            }
+
+            return temp;
         }
     }
     private void GeneratePlayer()
@@ -231,5 +288,16 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    
+    private void GenerateGoal()
+    {
+        GameObject goalGen = null;
+
+        goalGen = Instantiate(goalPrefab, goal1Pos.position, Quaternion.identity);
+        goalGen.name = "Goal1";
+        goalGen.GetComponent<Goal>().SetGoal(Goal.PlayerGoal.Player_1);
+
+        goalGen = Instantiate(goalPrefab, goal2Pos.position, Quaternion.identity);
+        goalGen.name = "Goal2";
+        goalGen.GetComponent<Goal>().SetGoal(Goal.PlayerGoal.Player_2);
+    }
 }

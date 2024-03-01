@@ -77,6 +77,7 @@ public class ScoreManager : MonoBehaviour
 
 
 
+            addScore(playerId, ball);
 
             //
             for (float i = 1; i >= 0; i -= 0.025f)
@@ -88,7 +89,6 @@ public class ScoreManager : MonoBehaviour
 
             gameManager.ResetPositions();
 
-            addScore(playerId, ball);
         }
     }
 }

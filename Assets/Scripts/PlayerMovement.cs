@@ -24,6 +24,14 @@ public class PlayerMovement : MonoBehaviour
     {
         return flyBoost;
     }
+    public void SetFlyBoost(float set)
+    {
+        flyBoost = set;
+    }
+
+
+
+
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.transform.CompareTag("Floor"))
