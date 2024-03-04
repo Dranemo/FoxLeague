@@ -29,7 +29,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject goalPrefab;
 
 
-    [SerializeField, Range(1,2)] private int playerNumber = 2;
+    [SerializeField, Range(1,2)] public int playerNumber = 2;
+    public int playerLoaded = 0;
     [SerializeField] private int numberObstacles = 10;
 
 
@@ -44,6 +45,10 @@ public class GameManager : MonoBehaviour
     private GameObject ball;
     private GameObject player;
     private GameObject player2;
+    private GameObject goal1;
+    private GameObject goal2;
+    private GameObject obstacles;
+    private GameObject canva;
 
 
     public static GameManager GetInstance()
@@ -69,55 +74,15 @@ public class GameManager : MonoBehaviour
         goal1Pos = scene.transform.Find("GoalStartPosition");
         goal2Pos = scene.transform.Find("Goal2StartPosition");
 
-        Debug.Log(goal1Pos.position + " " + goal2Pos.position);
-
 
         GenerateTerrain();
 
-        ball = FindObjectOfType<Ball>().gameObject;
-
-        player = GameObject.FindWithTag("Player");
-        player2 = GameObject.FindWithTag("Player2");
-        if (player2 == null)
-        {
-            player2 = GameObject.FindWithTag("AI");
-        }
-
+        FindItems();
 
         ResetPositions();
     }
 
 
-    private void Awake()
-    {
-        // Trouver le GameObject "Cube" à partir de l'objet actuel (ce script est attaché à un GameObject)
-        GameObject cubeTransform = GameObject.Find("Scene/WallZ");
-
-        // Vérifier si le GameObject "Cube" a été trouvé
-        if (cubeTransform != null)
-        {
-            // Accéder au composant MeshRenderer du GameObject "Cube"
-            MeshRenderer cubeRenderer = cubeTransform.GetComponent<MeshRenderer>();
-
-            // Vérifier si le composant MeshRenderer a été trouvé
-            if (cubeRenderer != null)
-            {
-                // Accéder à la taille du Bounds du MeshRenderer
-                Vector3 size = cubeRenderer.bounds.size;
-
-                // Afficher la taille dans la console
-                Debug.Log("Taille du Cube : " + size);
-            }
-            else
-            {
-                Debug.LogError("Le composant MeshRenderer n'a pas été trouvé sur le Cube.");
-            }
-        }
-        else
-        {
-            Debug.LogError("Le GameObject 'Cube' n'a pas été trouvé sous 'GOAL'.");
-        }
-    }
 
     public void ResetPositions()
     {
@@ -131,7 +96,6 @@ public class GameManager : MonoBehaviour
         player.transform.LookAt(new Vector3(0, 0, 1));
         player.GetComponent<PlayerMovement>().SetFlyBoost(100);
 
-
         //Reset le joueur 2 ou l'IA
         player2.transform.position = player2Pos.transform.position;
         player2.transform.LookAt(new Vector3(0, 0, -1));
@@ -139,6 +103,32 @@ public class GameManager : MonoBehaviour
 
 
         allKinetic(false);
+    }
+
+    public void RepositionItems()
+    {
+        GenerateRandomObstacle(true);
+        playerLoaded = 0;
+    }
+
+    private void FindItems()
+    {
+
+        Debug.Log(player);
+        player = GameObject.FindWithTag("Player");
+        Debug.Log(player);
+
+        player2 = GameObject.FindWithTag("Player2");
+        if (player2 == null)
+        {
+            player2 = GameObject.FindWithTag("AI");
+        }
+        ball = FindObjectOfType<Ball>().gameObject;
+
+        goal1 = GameObject.Find("Goal1");
+        goal2 = GameObject.Find("Goal2");
+
+        canva = FindObjectOfType<Canvas>().gameObject;
     }
 
     public void allKinetic(bool booleen)
@@ -149,19 +139,85 @@ public class GameManager : MonoBehaviour
     }
 
 
+
+
+
+
     private void GenerateTerrain()
     {
+        GenerateOverlay();
         GenerateGoal();
         GeneratePlayer();
         GenerateBall();
         GenerateRandomObstacle();
-        GenerateOverlay();
-    }
 
-    private void GenerateRandomObstacle()
+
+
+
+
+        
+
+        void GeneratePlayer()
+        {
+            GameObject playerGen = null;
+
+            // Joueur 1
+            playerGen = Instantiate(playerPrefab, Vector3.zero, Quaternion.identity);
+
+            // Joueur 2
+            playerGen = Instantiate(playerPrefab, Vector3.zero, Quaternion.identity);
+        }
+
+        void GenerateBall()
+        {
+            GameObject ballGen = null;
+
+            ballGen = Instantiate(ballPrefab, Vector3.zero, Quaternion.identity);
+            ballGen.name = "Ball";
+        }
+
+        void GenerateOverlay()
+        {
+            GameObject OverlayGen = null;
+
+            OverlayGen = Instantiate(canvaPrefab, Vector3.zero, Quaternion.identity);
+            OverlayGen.name = "Overlay";
+            OverlayGen.layer = 5;
+
+            foreach (Transform childTransform in OverlayGen.transform)
+            {
+                childTransform.gameObject.layer = 5;
+            }
+        }
+
+        void GenerateGoal()
+        {
+            GameObject goalGen = null;
+
+            Quaternion inversion = Quaternion.Euler(0, 180, 0);
+            goalGen = Instantiate(goalPrefab, goal1Pos.position, inversion);
+            goalGen.name = "Goal1";
+            goalGen.GetComponent<Goal>().SetGoal(Goal.PlayerGoal.Player_1);
+
+            goalGen = Instantiate(goalPrefab, goal2Pos.position, Quaternion.identity);
+            goalGen.name = "Goal2";
+            goalGen.GetComponent<Goal>().SetGoal(Goal.PlayerGoal.Player_2);
+        }
+    }
+    void GenerateRandomObstacle(bool itemAlreadyThere = false)
     {
-        //instancier un gameobject vide
-        GameObject obstacles = new GameObject("Obstacles");
+        Debug.Log("Coucou");
+
+        if (!itemAlreadyThere)
+        {
+            //instancier un gameobject vide
+            GameObject obstacles_ = new GameObject("Obstacles");
+            numberObstacles = Random.Range(10, 40);
+
+
+            obstacles = obstacles_;
+        }
+        
 
         //Creer une liste de toutes les positions des obstacles
         List<List<float>> positionList = new();
@@ -196,15 +252,16 @@ public class GameManager : MonoBehaviour
                 position.Clear();
                 position.Add(Random.Range(-24, 25)); // X
                 position.Add(Random.Range(-40, 41)); // Z
+                
 
 
                 //Check si c'est pas sur un point de spawn
-                bool spawnPositionItem = checkPosition(listAlreadyItems, position);
+                bool spawnPositionItem = checkPosition(listAlreadyItems, position, 10);
 
-                if(spawnPositionItem)
+                if (spawnPositionItem)
                 {
                     //check s'il n'y a pas deja un obstacle
-                    bool canSpawn = checkPosition(positionList, position);
+                    bool canSpawn = checkPosition(positionList, position, 5);
 
                     if (canSpawn)
                     {
@@ -217,18 +274,30 @@ public class GameManager : MonoBehaviour
             positionList.Add(position);
 
 
-            //Instentier l'item
-            GameObject itemCreated = null;
+            if (!itemAlreadyThere)
+            {
+                //Instentier l'item
+                GameObject itemCreated = null;
 
-            int prefabGenerated = Random.Range(0, 5); // Quel prefab ?
-            itemCreated = Instantiate(GetPrefab(prefabGenerated), new Vector3(positionList[i][0], 0, positionList[i][1]), Quaternion.Euler(0, Random.Range(0, 360), 0));
-            itemCreated.tag = "Obstacle";
-            itemCreated.name = "item" + i;
-            itemCreated.transform.parent = obstacles.transform;
+                int prefabGenerated = Random.Range(0, 5); // Quel prefab ?
+                itemCreated = Instantiate(GetPrefab(prefabGenerated), new Vector3(positionList[i][0], 0, positionList[i][1]), Quaternion.Euler(0, Random.Range(0, 360), 0));
+                itemCreated.tag = "Obstacle";
+                itemCreated.name = "item" + i;
+                itemCreated.transform.parent = obstacles.transform;
+            }
+            else
+            {
+                Transform itemMoving = obstacles.transform.Find ("item" + i);
+
+                Vector3 newPos = new Vector3(positionList[i][0], 0, positionList[i][1]);
+
+
+                Debug.Log("Position avant du item" + i + " " + itemMoving.position);
+                Debug.Log("Nouvelle pos" +  positionList[i][0] + "; " + positionList[i][1]);
+                itemMoving.position = newPos;
+                Debug.Log("Position apres du item" + i + " " + itemMoving.position);
+            }
         }
-
-        Debug.Log(positionList.Count);
-
 
 
 
@@ -252,13 +321,13 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        bool checkPosition(List<List<float>> list, List<float> newList)
+        bool checkPosition(List<List<float>> list, List<float> newList, int distance)
         {
             bool temp = true;
 
             foreach (List<float> item in list)
             {
-                if ((newList[0] < item[0] + 7 && newList[0] > item[0] - 7) && (newList[1] < item[1] + 7 && newList[1] > item[1] - 7))
+                if ((newList[0] < item[0] + distance && newList[0] > item[0] - distance) && (newList[1] < item[1] + distance && newList[1] > item[1] - distance))
                 {
                     temp = false;
                 }
@@ -266,67 +335,5 @@ public class GameManager : MonoBehaviour
 
             return temp;
         }
-    }
-    private void GeneratePlayer()
-    {
-        GameObject playerGen = null;
-
-        // Joueur 1
-        playerGen = Instantiate(playerPrefab, Vector3.zero, Quaternion.identity);
-        playerGen.GetComponent<Player>().SetPlayerEnum(Player.PlayerEnum.player1);
-        playerGen.tag = "Player";
-
-
-        // Joueur 2
-        playerGen = Instantiate(playerPrefab, Vector3.zero, Quaternion.identity);
-        switch (playerNumber)
-        {
-            case 1:
-                playerGen.GetComponent<Player>().SetPlayerEnum(Player.PlayerEnum.player2);
-                playerGen.tag = "Player2";
-                break;
-
-
-            case 2:
-                playerGen.GetComponent<Player>().SetPlayerEnum(Player.PlayerEnum.AI);
-                playerGen.tag = "AI";
-                break;
-        }
-    }
-
-    private void GenerateBall()
-    {
-        GameObject ballGen = null;
-
-        ballGen = Instantiate(ballPrefab, Vector3.zero, Quaternion.identity);
-        ballGen.name = "Ball";
-    }
-
-    private void GenerateOverlay()
-    {
-        GameObject OverlayGen = null;
-
-        OverlayGen = Instantiate(canvaPrefab, Vector3.zero, Quaternion.identity);
-        OverlayGen.name = "Overlay";
-        OverlayGen.layer = 5;
-
-        foreach (Transform childTransform in OverlayGen.transform)
-        {
-            childTransform.gameObject.layer = 5;
-        }
-    }
-
-    private void GenerateGoal()
-    {
-        GameObject goalGen = null;
-
-        Quaternion inversion = Quaternion.Euler(0, 180, 0);
-        goalGen = Instantiate(goalPrefab, goal1Pos.position, inversion);
-        goalGen.name = "Goal1";
-        goalGen.GetComponent<Goal>().SetGoal(Goal.PlayerGoal.Player_1);
-
-        goalGen = Instantiate(goalPrefab, goal2Pos.position, Quaternion.identity);
-        goalGen.name = "Goal2";
-        goalGen.GetComponent<Goal>().SetGoal(Goal.PlayerGoal.Player_2);
     }
 }

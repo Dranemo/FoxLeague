@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEditor.Animations;
 using UnityEngine;
 using static Player;
@@ -11,6 +12,9 @@ public class Player : MonoBehaviour
 
     [SerializeField] private Material redMat;
     [SerializeField] private Material blueMat;
+
+    private GameManager gameManager;
+    private int numberPlayer;
 
 
     private GameObject go;
@@ -28,8 +32,9 @@ public class Player : MonoBehaviour
     private void Awake()
     {
         go = gameObject;
-    }
 
+        gameManager = GameManager.GetInstance();
+        numberPlayer = gameManager.playerNumber;
 
 
     private void Start()
@@ -41,33 +46,55 @@ public class Player : MonoBehaviour
         int playerLayer = 0;
 
 
-        if (playerEnum == PlayerEnum.player1)
+        if (gameManager.playerLoaded == 0)
         {
+
             playerLayer = 6;
 
             go.name = "Player1";
+            go.tag = "Player";
 
-            //chapo.GetComponent<SkinnedMeshRenderer>().material = blueMat; // Mettre la couleur du chapo
+            chapo.GetComponent<SkinnedMeshRenderer>().material = blueMat; // Mettre la couleur du chapo
+
+            if(numberPlayer == 1)
+            {
+                Rect tempRect = camera.GetComponent<Camera>().rect; // Deplacer le render
+                tempRect.width = 1f;
+
+                camera.GetComponent<Camera>().rect = tempRect;
+            }
+
+            if(ScoreManager.GetInstance().manche == 1+1)
+            {
+                go.name += "manch";
+            }
         }
 
-        else if (playerEnum == PlayerEnum.player2 || playerEnum == PlayerEnum.AI)
+        else if (gameManager.playerLoaded == 1)
         {
             playerLayer = 7;
+            
 
-            Rect tempRect = camera.GetComponent<Camera>().rect; // Deplacer le render
-            tempRect.x = 0.5f;
+            chapo.GetComponent<SkinnedMeshRenderer>().material = redMat; // Mettre la couleur du chapo
 
-            camera.GetComponent<Camera>().rect = tempRect;
-
-            //chapo.GetComponent<SkinnedMeshRenderer>().material = redMat; // Mettre la couleur du chapo
-
-            if (playerEnum == PlayerEnum.player2)
+            if (numberPlayer == 2)
             {
                 go.name = "Player2";
+                go.tag = "Player2";
+                go.GetComponent<Player>().SetPlayerEnum(Player.PlayerEnum.player2);
+
+                Rect tempRect = camera.GetComponent<Camera>().rect; // Deplacer le render
+                tempRect.x = 0.5f;
+
+                camera.GetComponent<Camera>().rect = tempRect;
             }
-            else if (playerEnum == PlayerEnum.AI)
+            else if (numberPlayer == 1)
             {
                 go.name = "AI";
+                go.tag = "AI";
+                go.GetComponent<Player>().SetPlayerEnum(Player.PlayerEnum.AI);
+
+                Destroy(camera.gameObject);
             }
         }
 
@@ -87,5 +114,8 @@ public class Player : MonoBehaviour
             }
         }
 
+
+        gameManager.playerLoaded++;
     }
+
 }
