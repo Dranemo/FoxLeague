@@ -20,10 +20,10 @@ public class ScoreManager : MonoBehaviour
         gameManager = GameManager.GetInstance();
 
         textScoreP1 = this.transform.Find("ScoreP1").GetComponent<TextMeshProUGUI>();
-        textScoreP1.text = "P2 : " + gameManager.score1.ToString();
+        textScoreP1.text = gameManager.score1.ToString() + " : P1";
 
         textScoreP2 = this.transform.Find("ScoreP2").GetComponent<TextMeshProUGUI>();
-        textScoreP2.text = gameManager.score1.ToString() + " : P1";
+        textScoreP2.text = "P2 : " + gameManager.score2.ToString();
     }
 
 
@@ -46,7 +46,7 @@ public class ScoreManager : MonoBehaviour
         {
             case 1:
                 gameManager.score1++;
-                textScoreP1.text = "P2 : " + gameManager.score1.ToString();
+                textScoreP1.text = gameManager.score1.ToString() + " : P1";
                 if (gameManager.score1>=2)
                 {
                     Cursor.lockState = CursorLockMode.None;
@@ -56,7 +56,7 @@ public class ScoreManager : MonoBehaviour
                 break;
             case 2:
                 gameManager.score2++;
-                textScoreP2.text = gameManager.score2.ToString() + " : P1";
+                textScoreP2.text = "P2 : " + gameManager.score2.ToString();
                 if (gameManager.score2 >= 2)
                 {
                     Cursor.lockState = CursorLockMode.None;
