@@ -7,7 +7,8 @@ using UnityEngine.SceneManagement;
 
 public class ScoreManager : MonoBehaviour
 {
-    public Text scoreText;
+    public Text scoreText; 
+    public TextMeshProUGUI winTag;
     private GameManager gameManager;
     private static ScoreManager instance;
 
@@ -50,8 +51,9 @@ public class ScoreManager : MonoBehaviour
                 if (gameManager.score1>=2)
                 {
                     Cursor.lockState = CursorLockMode.None;
-                    SceneManager.LoadScene("Victory_Screen");
+                    winTag.text = "Joueur 1";
                     Cursor.visible = true;
+                    SceneManager.LoadScene("Victory_Screen");
                 }
                 break;
             case 2:
@@ -61,6 +63,7 @@ public class ScoreManager : MonoBehaviour
                 {
                     Cursor.lockState = CursorLockMode.None;
                     Cursor.visible = true;
+                    winTag.text = "Joueur 2";
                     SceneManager.LoadScene("Victory_Screen");
                 }
                 break;

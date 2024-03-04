@@ -12,6 +12,7 @@ TagManager:
   - MainCamera2
   - AI
   - Obstacle
+  - WinTag
   layers:
   - Default
   - TransparentFX

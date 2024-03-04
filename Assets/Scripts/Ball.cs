@@ -12,12 +12,22 @@ public class Ball : MonoBehaviour
     [SerializeField] private Material RedTrail;
     [SerializeField] private Material BlueTrail;
     [SerializeField] private Material GrayTrail;
+    public AudioClip ballSound;
+    private AudioSource audioSource;
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
     }
-
+    void Start()
+    {
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null)
+        {
+            audioSource = gameObject.AddComponent<AudioSource>();
+        }
+        audioSource.clip = ballSound;
+    }
     // Update is called once per frame
     void Update()
     {
@@ -36,8 +46,11 @@ public class Ball : MonoBehaviour
     }
 
     private void OnCollisionEnter(Collision collision)
-    {        
-
+    {
+        if (collision.gameObject.CompareTag("Ball"))
+        {
+            audioSource.Play();
+        }
 
         if (collision.transform.CompareTag("Player") || collision.transform.CompareTag("Player2"))
         {

@@ -34,7 +34,7 @@ public class Player : MonoBehaviour
 
     private void Start()
     {
-        Transform chapo = go.transform.Find("Chapo").Find("ChapoModel");
+        /*Transform chapo = go.transform.Find("Chapo").Find("ChapoModel");*/
         Transform camera = go.transform.Find("PlayerCamera");
         camera.tag = "MainCamera";
 
@@ -47,7 +47,7 @@ public class Player : MonoBehaviour
 
             go.name = "Player1";
 
-            chapo.GetComponent<SkinnedMeshRenderer>().material = blueMat; // Mettre la couleur du chapo
+            //chapo.GetComponent<SkinnedMeshRenderer>().material = blueMat; // Mettre la couleur du chapo
         }
 
         else if (playerEnum == PlayerEnum.player2 || playerEnum == PlayerEnum.AI)
@@ -59,7 +59,7 @@ public class Player : MonoBehaviour
 
             camera.GetComponent<Camera>().rect = tempRect;
 
-            chapo.GetComponent<SkinnedMeshRenderer>().material = redMat; // Mettre la couleur du chapo
+            //chapo.GetComponent<SkinnedMeshRenderer>().material = redMat; // Mettre la couleur du chapo
 
             if (playerEnum == PlayerEnum.player2)
             {
