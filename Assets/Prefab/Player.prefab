@@ -840,6 +840,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerEnum: 0
+  redMat: {fileID: 2100000, guid: 75591428178e14744a7d181fac884e90, type: 2}
+  blueMat: {fileID: 2100000, guid: 36566961767c0754dbed99da52522f26, type: 2}
 --- !u!54 &4206921553541758120
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1461,6 +1463,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 1.743
+      objectReference: {fileID: 0}
+    - target: {fileID: -7600533772604087169, guid: b0ec1ee6e853b6c4dafe50aa57a72e7b,
+        type: 3}
+      propertyPath: m_Name
+      value: ChapoModel
       objectReference: {fileID: 0}
     - target: {fileID: -4288313113248946525, guid: b0ec1ee6e853b6c4dafe50aa57a72e7b,
         type: 3}
