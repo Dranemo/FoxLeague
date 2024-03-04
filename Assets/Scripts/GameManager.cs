@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngineInternal;
 using static UnityEditor.Experimental.GraphView.GraphView;
 
@@ -32,23 +33,28 @@ public class GameManager : MonoBehaviour
     [SerializeField, Range(1,2)] public int playerNumber = 2;
     public int playerLoaded = 0;
     [SerializeField] private int numberObstacles = 10;
+    [SerializeField] private int spread = 5;
 
 
     [SerializeField] private Transform cam1;
     [SerializeField] private Transform cam2;
 
-    [SerializeField] public int score1 = 0;
-    [SerializeField] public int score2 = 0;
 
     private static GameManager instance;
 
     private GameObject ball;
     private GameObject player;
     private GameObject player2;
-    private GameObject goal1;
-    private GameObject goal2;
     private GameObject obstacles;
-    private GameObject canva;
+
+    ScoreCanvaManager scoreCanvaManager;
+    [SerializeField] public int score1 = 0;
+    [SerializeField] public int score2 = 0;
+
+    private int WinP1 = 0;
+    private int WinP2 = 0;
+
+    private bool canAddTime = true;
 
 
     public static GameManager GetInstance()
@@ -77,13 +83,15 @@ public class GameManager : MonoBehaviour
 
         GenerateTerrain();
 
+        scoreCanvaManager = ScoreCanvaManager.GetInstance();
+
         FindItems();
 
         ResetPositions();
     }
 
 
-
+    // --------------------------- LOGIQUE POSITIONS --------------------------- //
     public void ResetPositions()
     {
         //Reset la balle
@@ -103,6 +111,7 @@ public class GameManager : MonoBehaviour
 
 
         allKinetic(false);
+        scoreCanvaManager.PauseUnpauseTime(false);
     }
 
     public void RepositionItems()
@@ -113,10 +122,7 @@ public class GameManager : MonoBehaviour
 
     private void FindItems()
     {
-
-        Debug.Log(player);
         player = GameObject.FindWithTag("Player");
-        Debug.Log(player);
 
         player2 = GameObject.FindWithTag("Player2");
         if (player2 == null)
@@ -124,11 +130,6 @@ public class GameManager : MonoBehaviour
             player2 = GameObject.FindWithTag("AI");
         }
         ball = FindObjectOfType<Ball>().gameObject;
-
-        goal1 = GameObject.Find("Goal1");
-        goal2 = GameObject.Find("Goal2");
-
-        canva = FindObjectOfType<Canvas>().gameObject;
     }
 
     public void allKinetic(bool booleen)
@@ -137,11 +138,6 @@ public class GameManager : MonoBehaviour
         player.transform.GetComponent<Rigidbody>().isKinematic = booleen;
         player2.transform.GetComponent<Rigidbody>().isKinematic = booleen;
     }
-
-
-
-
-
 
     private void GenerateTerrain()
     {
@@ -204,7 +200,7 @@ public class GameManager : MonoBehaviour
             goalGen.GetComponent<Goal>().SetGoal(Goal.PlayerGoal.Player_2);
         }
     }
-    void GenerateRandomObstacle(bool itemAlreadyThere = false)
+    /*void GenerateRandomObstacle(bool itemAlreadyThere = false)
     {
         Debug.Log("Coucou");
 
@@ -335,5 +331,106 @@ public class GameManager : MonoBehaviour
 
             return temp;
         }
+    }*/
+
+    void GenerateRandomObstacle(bool itemAlreadyThere = false)
+    {
+
+    }
+
+
+
+
+    // --------------------------- SCORES --------------------------- //
+    public void AddScore(int playerId)
+    {
+        switch (playerId)
+        {
+            case 1:
+                score1++;
+                break;
+            case 2:
+                score2++;
+                break;
+            default:
+                break;
+        }
+
+        scoreCanvaManager.WriteCanvaScore(score1, score2);
+    }
+
+    public IEnumerator GoalDone(int playerId)
+    {
+        if (!ball.GetComponent<Ball>().isGoaled)
+        {
+            ball.GetComponent<Ball>().isGoaled = true;
+            //Mettre tout en pause
+            allKinetic(true);
+            scoreCanvaManager.timePause = true;
+
+            Debug.Log("aa");
+            AddScore(playerId);
+
+            //
+            for (float i = 1; i >= 0; i -= 0.025f)
+            {
+                ball.transform.localScale *= i;
+                yield return new WaitForSeconds(.05f);
+            }
+            Debug.Log("aaa");
+
+            ResetPositions();
+        }
+    }
+
+    public void nextManche()
+    {
+        if(score1 == score2 && canAddTime)
+        {
+            scoreCanvaManager.PauseUnpauseTime(true);
+
+            StartCoroutine(GoalDone(0));
+
+            scoreCanvaManager.currentTime = 120;
+
+            canAddTime = false;
+        }
+        else
+        {
+            if (score1 > score2)
+            {
+                WinP1++;
+            }
+            else if (score1 < score2)
+            {
+                WinP2++;
+            }
+
+
+            score1 = 0;
+            score2 = 0;
+
+            
+
+
+
+            if (WinP1 >= 2 || WinP2 >= 2)
+            {
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
+                SceneManager.LoadScene("Main_Menu");
+            }
+
+            else
+            {
+                RepositionItems();
+                scoreCanvaManager.ResetCanva();
+            }
+        }
+    }
+
+    public void EndGame()
+    {
+
     }
 }

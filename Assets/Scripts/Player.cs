@@ -61,11 +61,6 @@ public class Player : MonoBehaviour
 
                 camera.GetComponent<Camera>().rect = tempRect;
             }
-
-            if(ScoreManager.GetInstance().manche == 1+1)
-            {
-                go.name += "manch";
-            }
         }
 
         else if (gameManager.playerLoaded == 1)

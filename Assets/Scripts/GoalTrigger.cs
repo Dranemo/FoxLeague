@@ -11,11 +11,11 @@ public class GoalTrigger : MonoBehaviour
         {
             if (transform.parent.GetComponent<Goal>().GetGoal() == PlayerGoal.Player_2) 
             {
-                StartCoroutine(ScoreManager.GetInstance().Goal(1, other.gameObject));
+                StartCoroutine(GameManager.GetInstance().GoalDone(1));
             }
             else if (transform.parent.GetComponent<Goal>().GetGoal() == PlayerGoal.Player_1)
             {
-                StartCoroutine(ScoreManager.GetInstance().Goal(2, other.gameObject));
+                StartCoroutine(GameManager.GetInstance().GoalDone(2));
             }
         }
 
