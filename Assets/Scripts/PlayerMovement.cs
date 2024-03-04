@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
@@ -75,11 +76,17 @@ public class PlayerMovement : MonoBehaviour
             jumpVector = Vector3.up * jumpSpeed;
         }
 
+        else if (canJump)
+        {
+            speed = 1250f;
+        }
+
         else if (!canJump && jumpInput && flyBoost > 0)
         {
             jumpBoostVector = Vector3.up * flySpeed;
+            speed = 625f;
         }
-        
+
         RaycastHit hit;
         if (Physics.Raycast(transform.position, Vector3.down, out hit, 1f))
         {
