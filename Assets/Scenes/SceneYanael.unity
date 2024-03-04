@@ -235,6 +235,7 @@ MonoBehaviour:
   goalPrefab: {fileID: 8872423478649563501, guid: ec983b8a225c85d4198ed4bfcb8320a2,
     type: 3}
   playerNumber: 1
+  playerLoaded: 0
   numberObstacles: 25
   cam1: {fileID: 0}
   cam2: {fileID: 0}
