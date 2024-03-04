@@ -50,7 +50,7 @@ public class ScoreManager : MonoBehaviour
                 if (gameManager.score1>=2)
                 {
                     Cursor.lockState = CursorLockMode.None;
-                    SceneManager.LoadScene("Main_Menu");
+                    SceneManager.LoadScene("Victory_Screen");
                     Cursor.visible = true;
                 }
                 break;
@@ -61,7 +61,7 @@ public class ScoreManager : MonoBehaviour
                 {
                     Cursor.lockState = CursorLockMode.None;
                     Cursor.visible = true;
-                    SceneManager.LoadScene("Main_Menu");
+                    SceneManager.LoadScene("Victory_Screen");
                 }
                 break;
         }
