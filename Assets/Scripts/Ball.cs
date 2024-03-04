@@ -9,6 +9,10 @@ public class Ball : MonoBehaviour
 
     [SerializeField] private float forceCollision = 10.0f;
 
+    [SerializeField] private Material RedTrail;
+    [SerializeField] private Material BlueTrail;
+    [SerializeField] private Material GrayTrail;
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
@@ -17,7 +21,18 @@ public class Ball : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if(transform.position.z >= 15) // Droite
+        {
+            GetComponent<TrailRenderer>().material = RedTrail;
+        }
+        else if (transform.position.z <= -15) // Gauche
+        {
+            GetComponent<TrailRenderer>().material = BlueTrail;
+        }
+        else // Mid
+        {
+            GetComponent<TrailRenderer>().material = GrayTrail;
+        }
     }
 
     private void OnCollisionEnter(Collision collision)

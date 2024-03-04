@@ -1480,7 +1480,7 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: b0ec1ee6e853b6c4dafe50aa57a72e7b,
         type: 3}
       propertyPath: m_Name
-      value: animal_people_beanie_wolf_1_onWear
+      value: Chapo
       objectReference: {fileID: 0}
     - target: {fileID: 4775381839483542439, guid: b0ec1ee6e853b6c4dafe50aa57a72e7b,
         type: 3}
