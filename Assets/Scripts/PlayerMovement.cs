@@ -52,8 +52,8 @@ public class PlayerMovement : MonoBehaviour
         float horizontalInput = 0f;
         float verticalInput = 0f;
         bool jumpInput = false;
-
-
+        float speedAnim = GetComponent<Rigidbody>().velocity.magnitude;
+        this.GetComponent<Animator>().SetFloat("MoveSpeed", speedAnim);
         if (gameObject.GetComponent<Player>().GetPlayerEnum() == Player.PlayerEnum.player2 || gameObject.GetComponent<Player>().GetPlayerEnum() == Player.PlayerEnum.AI)
         {
             //horizontalInput = Input.GetAxis("Horizontal2");
@@ -74,11 +74,13 @@ public class PlayerMovement : MonoBehaviour
         if (jumpInput && canJump)
         {
             jumpVector = Vector3.up * jumpSpeed;
+            this.GetComponent<Animator>().SetBool("Jump", true);
         }
 
         else if (canJump)
         {
             speed = 1250f;
+            this.GetComponent<Animator>().SetBool("Jump", false);
         }
 
         else if (!canJump && jumpInput && flyBoost > 0)

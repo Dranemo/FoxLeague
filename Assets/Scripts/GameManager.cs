@@ -368,7 +368,6 @@ public class GameManager : MonoBehaviour
             allKinetic(true);
             scoreCanvaManager.timePause = true;
 
-            Debug.Log("aa");
             AddScore(playerId);
 
             //
@@ -377,7 +376,6 @@ public class GameManager : MonoBehaviour
                 ball.transform.localScale *= i;
                 yield return new WaitForSeconds(.05f);
             }
-            Debug.Log("aaa");
 
             ResetPositions();
         }
