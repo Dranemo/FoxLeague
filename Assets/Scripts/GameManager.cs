@@ -44,6 +44,10 @@ public class GameManager : MonoBehaviour
     private GameObject ball;
     private GameObject player;
     private GameObject player2;
+    private GameObject goal1;
+    private GameObject goal2;
+    private GameObject obstacles;
+    private GameObject canva;
 
 
     public static GameManager GetInstance()
@@ -74,15 +78,7 @@ public class GameManager : MonoBehaviour
 
         GenerateTerrain();
 
-        ball = FindObjectOfType<Ball>().gameObject;
-
-        player = GameObject.FindWithTag("Player");
-        player2 = GameObject.FindWithTag("Player2");
-        if (player2 == null)
-        {
-            player2 = GameObject.FindWithTag("AI");
-        }
-
+        FindItems();
 
         ResetPositions();
     }
@@ -122,6 +118,8 @@ public class GameManager : MonoBehaviour
     public void ResetPositions()
     {
         //Reset la balle
+        Debug.Log(ball);
+
         ball.transform.localScale = Vector3.one * 20;
         ball.transform.position = ballPos.transform.position;
         ball.GetComponent<Ball>().isGoaled = false;
@@ -139,6 +137,37 @@ public class GameManager : MonoBehaviour
 
 
         allKinetic(false);
+
+        Debug.Log("reseted");
+    }
+
+    public void DeleteAllCreatedItem()
+    {
+        GameObject.Destroy(player);
+        GameObject.Destroy(player2);
+        GameObject.Destroy(ball);
+        GameObject.Destroy(goal1);
+        GameObject.Destroy(goal2);
+        GameObject.Destroy(obstacles);
+        GameObject.Destroy(canva);
+    }
+
+    public void FindItems()
+    {
+        player = GameObject.FindWithTag("Player");
+        player2 = GameObject.FindWithTag("Player2");
+        if (player2 == null)
+        {
+            player2 = GameObject.FindWithTag("AI");
+        }
+        ball = GameObject.FindObjectOfType<Ball>().gameObject;
+
+        obstacles = GameObject.Find("Obstacles");
+
+        obstacles = GameObject.Find("Goal1");
+        obstacles = GameObject.Find("Goal2");
+
+        canva = GameObject.FindObjectOfType<Canvas>().gameObject;
     }
 
     public void allKinetic(bool booleen)
@@ -149,7 +178,11 @@ public class GameManager : MonoBehaviour
     }
 
 
-    private void GenerateTerrain()
+
+
+
+
+    public void GenerateTerrain()
     {
         GenerateGoal();
         GeneratePlayer();
@@ -161,7 +194,7 @@ public class GameManager : MonoBehaviour
     private void GenerateRandomObstacle()
     {
         //instancier un gameobject vide
-        GameObject obstacles = new GameObject("Obstacles");
+        GameObject obstacles_ = new GameObject("Obstacles");
 
         //Creer une liste de toutes les positions des obstacles
         List<List<float>> positionList = new();
@@ -199,12 +232,12 @@ public class GameManager : MonoBehaviour
 
 
                 //Check si c'est pas sur un point de spawn
-                bool spawnPositionItem = checkPosition(listAlreadyItems, position);
+                bool spawnPositionItem = checkPosition(listAlreadyItems, position, 10);
 
                 if(spawnPositionItem)
                 {
                     //check s'il n'y a pas deja un obstacle
-                    bool canSpawn = checkPosition(positionList, position);
+                    bool canSpawn = checkPosition(positionList, position, 5);
 
                     if (canSpawn)
                     {
@@ -224,7 +257,7 @@ public class GameManager : MonoBehaviour
             itemCreated = Instantiate(GetPrefab(prefabGenerated), new Vector3(positionList[i][0], 0, positionList[i][1]), Quaternion.Euler(0, Random.Range(0, 360), 0));
             itemCreated.tag = "Obstacle";
             itemCreated.name = "item" + i;
-            itemCreated.transform.parent = obstacles.transform;
+            itemCreated.transform.parent = obstacles_.transform;
         }
 
         Debug.Log(positionList.Count);
@@ -252,13 +285,13 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        bool checkPosition(List<List<float>> list, List<float> newList)
+        bool checkPosition(List<List<float>> list, List<float> newList, int distance)
         {
             bool temp = true;
 
             foreach (List<float> item in list)
             {
-                if ((newList[0] < item[0] + 7 && newList[0] > item[0] - 7) && (newList[1] < item[1] + 7 && newList[1] > item[1] - 7))
+                if ((newList[0] < item[0] + distance && newList[0] > item[0] - distance) && (newList[1] < item[1] + distance && newList[1] > item[1] - distance))
                 {
                     temp = false;
                 }
@@ -275,7 +308,6 @@ public class GameManager : MonoBehaviour
         playerGen = Instantiate(playerPrefab, Vector3.zero, Quaternion.identity);
         playerGen.GetComponent<Player>().SetPlayerEnum(Player.PlayerEnum.player1);
         playerGen.tag = "Player";
-
 
         // Joueur 2
         playerGen = Instantiate(playerPrefab, Vector3.zero, Quaternion.identity);

@@ -4,6 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using System.CodeDom.Compiler;
 
 public class ScoreManager : MonoBehaviour
 {
@@ -13,6 +14,10 @@ public class ScoreManager : MonoBehaviour
 
     private TextMeshProUGUI textScoreP1;
     private TextMeshProUGUI textScoreP2;
+
+    private int manche = 1;
+    private int WinP1 = 0;
+    private int WinP2 = 0;
 
 
     void Start()
@@ -47,11 +52,9 @@ public class ScoreManager : MonoBehaviour
             case 1:
                 gameManager.score1++;
                 textScoreP1.text = gameManager.score1.ToString() + " : P1";
-                if (gameManager.score1>=2)
+                if (gameManager.score1 >= 2)
                 {
-                    Cursor.lockState = CursorLockMode.None;
-                    SceneManager.LoadScene("Main_Menu");
-                    Cursor.visible = true;
+                    nextManche(playerId);
                 }
                 break;
             case 2:
@@ -59,9 +62,7 @@ public class ScoreManager : MonoBehaviour
                 textScoreP2.text = "P2 : " + gameManager.score2.ToString();
                 if (gameManager.score2 >= 2)
                 {
-                    Cursor.lockState = CursorLockMode.None;
-                    Cursor.visible = true;
-                    SceneManager.LoadScene("Main_Menu");
+                    nextManche(playerId);
                 }
                 break;
         }
@@ -89,6 +90,36 @@ public class ScoreManager : MonoBehaviour
 
             gameManager.ResetPositions();
 
+        }
+    }
+
+    private void nextManche(int playerId)
+    {
+        manche++;
+        gameManager.DeleteAllCreatedItem();
+
+        gameManager.GenerateTerrain();
+
+        gameManager.FindItems();
+
+        gameManager.ResetPositions();
+
+        if (playerId == 1)
+        {
+            WinP1++;
+        }
+        else if(playerId == 2)
+        {
+            WinP2++;
+        }
+
+
+
+        if(WinP1 == 2 || WinP2 == 2)
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+            SceneManager.LoadScene("Main_Menu");
         }
     }
 }
