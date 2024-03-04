@@ -79,11 +79,21 @@ public class PlayerMovement : MonoBehaviour
         {
             jumpBoostVector = Vector3.up * flySpeed;
         }
-
-        if (canJump && flyBoost < 100)
+        
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position, Vector3.down, out hit, 1f))
         {
-            flyBoost += 100 * Time.deltaTime;
-        }
+            if (hit.collider.CompareTag("Floor") || hit.collider.CompareTag("Obstacle"))
+            {
+                // Refill the jetpack fuel
+                RefillJetpack();
+            }
+    }
+        void RefillJetpack()
+    {
+        flyBoost += 100 * Time.deltaTime;
+        flyBoost = Mathf.Clamp(flyBoost, 0f, 100);
+    }
     }
 
     private void FixedUpdate()
