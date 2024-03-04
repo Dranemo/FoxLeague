@@ -120,7 +120,7 @@ public class ScoreManager : MonoBehaviour
         {
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
-            SceneManager.LoadScene("Main_Menu");
+            SceneManager.LoadScene("Victory_Screen");
         }
 
         else
