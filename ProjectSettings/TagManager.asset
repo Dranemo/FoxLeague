@@ -11,6 +11,7 @@ TagManager:
   - Goal2
   - MainCamera2
   - AI
+  - Obstacle
   layers:
   - Default
   - TransparentFX

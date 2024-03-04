@@ -222,6 +222,7 @@ public class GameManager : MonoBehaviour
 
             int prefabGenerated = Random.Range(0, 5); // Quel prefab ?
             itemCreated = Instantiate(GetPrefab(prefabGenerated), new Vector3(positionList[i][0], 0, positionList[i][1]), Quaternion.Euler(0, Random.Range(0, 360), 0));
+            itemCreated.tag = "Obstacle";
             itemCreated.name = "item" + i;
             itemCreated.transform.parent = obstacles.transform;
         }
