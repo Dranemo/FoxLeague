@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Animations;
 using UnityEngine;
 using static Player;
 
@@ -33,44 +34,32 @@ public class Player : MonoBehaviour
 
     private void Start()
     {
-        Transform skinPlayer = go.transform.Find("SkinPlayer");
-        Transform modelPlayer = go.transform.Find("ModelPlayer");
-        Transform chapo = go.transform.Find("Chapo");
-
+        Transform chapo = go.transform.Find("Chapo").Find("ChapoModel");
         Transform camera = go.transform.Find("PlayerCamera");
         camera.tag = "MainCamera";
+
+        int playerLayer = 0;
 
 
         if (playerEnum == PlayerEnum.player1)
         {
+            playerLayer = 6;
+
             go.name = "Player1";
-            go.layer = 6;
 
-            camera.GetComponent<Camera>().cullingMask &= ~(1 << 6);
-
-            skinPlayer.gameObject.layer = 6;
-            modelPlayer.gameObject.layer = 6;
-            chapo.gameObject.layer = 6;
-
-            chapo.transform.Find("ChapoModel").GetComponent<SkinnedMeshRenderer>().material = blueMat;
+            chapo.GetComponent<SkinnedMeshRenderer>().material = blueMat; // Mettre la couleur du chapo
         }
 
         else if (playerEnum == PlayerEnum.player2 || playerEnum == PlayerEnum.AI)
         {
-            go.layer = 7;
+            playerLayer = 7;
 
-            camera.GetComponent<Camera>().cullingMask &= ~(1 << 7);
-
-            Rect tempRect = camera.GetComponent<Camera>().rect;
+            Rect tempRect = camera.GetComponent<Camera>().rect; // Deplacer le render
             tempRect.x = 0.5f;
 
             camera.GetComponent<Camera>().rect = tempRect;
 
-            skinPlayer.gameObject.layer = 7;
-            modelPlayer.gameObject.layer = 7;
-            chapo.gameObject.layer = 7;
-
-            chapo.transform.Find("ChapoModel").GetComponent<SkinnedMeshRenderer>().material = redMat;
+            chapo.GetComponent<SkinnedMeshRenderer>().material = redMat; // Mettre la couleur du chapo
 
             if (playerEnum == PlayerEnum.player2)
             {
@@ -81,5 +70,22 @@ public class Player : MonoBehaviour
                 go.name = "AI";
             }
         }
+
+
+
+
+        go.layer = playerLayer;
+
+        camera.GetComponent<Camera>().cullingMask &= ~(1 << playerLayer); // Enlever la layer de la camera
+
+        foreach (Transform child in transform) // Mettre la layer
+        {
+            child.gameObject.layer = playerLayer;
+            foreach (Transform child2 in child)
+            {
+                child2.gameObject.layer = playerLayer;
+            }
+        }
+
     }
 }
