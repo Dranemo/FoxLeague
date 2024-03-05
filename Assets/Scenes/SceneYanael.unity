@@ -238,7 +238,7 @@ MonoBehaviour:
   playerLoaded: 0
   numberObstacles: 25
   spread: 15
-  minDistance: 10
+  minDistance: 20
   cam1: {fileID: 0}
   cam2: {fileID: 0}
   score1: 0

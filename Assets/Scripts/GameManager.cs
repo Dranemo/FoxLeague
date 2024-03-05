@@ -223,7 +223,12 @@ public class GameManager : MonoBehaviour
             obstaclesList.Add(playerPos.gameObject);
 
 
-            position.Add(Vector3.zero);
+
+            Vector3 positionInitiale = new Vector3(-20, 0, -40);
+            GameObject item = CreateNewItem(position.Count, positionInitiale);
+            item.transform.parent = obstacles.transform;
+            obstaclesList.Add(item);
+            position.Add(positionInitiale);
 
 
             numberObstacles = Random.Range(30, 50);
@@ -243,7 +248,7 @@ public class GameManager : MonoBehaviour
                     Vector3 newPos = point + GetRandomPoint();
 
                     bool valid = true;
-                    if(!(newPos.x <  25 && newPos.x > -25 && newPos.z < 40 && newPos.z > -40))
+                    if(!(newPos.x <  20 || newPos.x > -20 || newPos.z < 40 || newPos.z > -40))
                     {
                         valid = false;
                     }
@@ -259,7 +264,7 @@ public class GameManager : MonoBehaviour
 
                     if (valid)
                     {
-                        GameObject item = CreateNewItem(position.Count, newPos);
+                        item = CreateNewItem(position.Count, newPos);
 
                         item.transform.parent = obstacles.transform;
                         obstaclesList.Add(item);
