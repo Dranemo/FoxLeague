@@ -234,9 +234,11 @@ MonoBehaviour:
     type: 3}
   goalPrefab: {fileID: 8872423478649563501, guid: ec983b8a225c85d4198ed4bfcb8320a2,
     type: 3}
-  playerNumber: 1
+  playerNumber: 2
   playerLoaded: 0
   numberObstacles: 25
+  spread: 15
+  minDistance: 10
   cam1: {fileID: 0}
   cam2: {fileID: 0}
   score1: 0
@@ -250,7 +252,7 @@ Transform:
   m_GameObject: {fileID: 386364256}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 45.6, y: -0.24, z: -92.4}
+  m_LocalPosition: {x: 45.6, y: -0.24, z: 40.4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

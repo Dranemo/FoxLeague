@@ -379,7 +379,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 1250
-  jumpSpeed: 800
+  jumpSpeed: 100
   flyBoost: 100
   flySpeed: 1500
 --- !u!114 &5906038673191115563

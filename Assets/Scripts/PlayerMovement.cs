@@ -33,13 +33,6 @@ public class PlayerMovement : MonoBehaviour
 
 
 
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.transform.CompareTag("Floor"))
-        {
-            canJump = true;
-        }
-    }
 
     private void Awake()
     {
@@ -54,10 +47,14 @@ public class PlayerMovement : MonoBehaviour
         bool jumpInput = false;
         float speedAnim = GetComponent<Rigidbody>().velocity.magnitude;
         this.GetComponent<Animator>().SetFloat("MoveSpeed", speedAnim);
-        if (gameObject.GetComponent<Player>().GetPlayerEnum() == Player.PlayerEnum.player2 || gameObject.GetComponent<Player>().GetPlayerEnum() == Player.PlayerEnum.AI)
+
+
+        // Get input
+        if (gameObject.GetComponent<Player>().GetPlayerEnum() == Player.PlayerEnum.player2)
         {
-            //horizontalInput = Input.GetAxis("Horizontal2");
-            //verticalInput = Input.GetAxis("Vertical2");
+            horizontalInput = Input.GetAxis("Horizontal2");
+            verticalInput = Input.GetAxis("Vertical2");
+            jumpInput = Input.GetButton("Jump2");
         }
         else if (gameObject.GetComponent<Player>().GetPlayerEnum() == Player.PlayerEnum.player1)
         {
@@ -74,35 +71,29 @@ public class PlayerMovement : MonoBehaviour
         if (jumpInput && canJump)
         {
             jumpVector = Vector3.up * jumpSpeed;
-            this.GetComponent<Animator>().SetBool("Jump", true);
         }
 
         else if (canJump)
         {
             speed = 1250f;
-            this.GetComponent<Animator>().SetBool("Jump", false);
         }
 
         else if (!canJump && jumpInput && flyBoost > 0)
         {
             jumpBoostVector = Vector3.up * flySpeed;
-            speed = 625f;
         }
 
-        RaycastHit hit;
-        if (Physics.Raycast(transform.position, Vector3.down, out hit, 1f))
-        {
-            if (hit.collider.CompareTag("Floor") || hit.collider.CompareTag("Obstacle"))
-            {
-                // Refill the jetpack fuel
-                RefillJetpack();
-            }
+
+
+
+        
     }
-        void RefillJetpack()
+
+
+    void RefillJetpack()
     {
         flyBoost += 100 * Time.deltaTime;
         flyBoost = Mathf.Clamp(flyBoost, 0f, 100);
-    }
     }
 
     private void FixedUpdate()
@@ -110,18 +101,48 @@ public class PlayerMovement : MonoBehaviour
         rb.AddForce(movementX);
         rb.AddForce(movementZ);
         
+
+        //Saut
         if (jumpVector != Vector3.zero)
         {
             rb.AddForce(jumpVector, ForceMode.Impulse);
             jumpVector = Vector3.zero;
             canJump = false;
+
+            this.GetComponent<Animator>().SetBool("Jump", true);
+            GetComponent<Rigidbody>().drag = 0.5f;
+            speed = 625f;
         }
+
+        //Fly
         if (jumpBoostVector != Vector3.zero)
         {
             rb.AddForce(jumpBoostVector, ForceMode.Force);
             flyBoost -= 1;
             jumpBoostVector = Vector3.zero;
         }
+
+
+
+
+
+        // Collision avec le un truc en dessous
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position, Vector3.down, out hit, 1f))
+        {
+            if (hit.collider.CompareTag("Floor") || hit.collider.CompareTag("Obstacle"))
+            {
+                // Refill the jetpack fuel
+                RefillJetpack();
+                if (!canJump)
+                {
+                    canJump = true;
+                }
+                GetComponent<Rigidbody>().drag = 1.5f;
+                this.GetComponent<Animator>().SetBool("Jump", false);
+            }
+        }
+
 
     }
 }
