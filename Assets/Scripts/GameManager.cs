@@ -248,7 +248,7 @@ public class GameManager : MonoBehaviour
                     Vector3 newPos = point + GetRandomPoint();
 
                     bool valid = true;
-                    if(!(newPos.x <  20 || newPos.x > -20 || newPos.z < 40 || newPos.z > -40))
+                    if(newPos.x >  20 || newPos.x < -20 || newPos.z > 40 || newPos.z < -40)
                     {
                         valid = false;
                     }
@@ -350,7 +350,7 @@ public class GameManager : MonoBehaviour
             ball.GetComponent<Ball>().isGoaled = true;
             //Mettre tout en pause
             allKinetic(true);
-            ParticleSystem(ball.transform.position);
+            //ParticleSystem(ball.transform.position);
             scoreCanvaManager.timePause = true;
 
             AddScore(playerId);
