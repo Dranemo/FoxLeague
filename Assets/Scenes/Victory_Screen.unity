@@ -390,7 +390,7 @@ GameObject:
   - component: {fileID: 284387577}
   - component: {fileID: 284387576}
   m_Layer: 5
-  m_Name: Text (TMP) (1)
+  m_Name: Winner
   m_TagString: WinTag
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -674,7 +674,7 @@ GameObject:
   - component: {fileID: 995678069}
   - component: {fileID: 995678068}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: VictoryStatus
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
