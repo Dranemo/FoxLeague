@@ -5427,6 +5427,7 @@ MonoBehaviour:
   playerNumber: 1
   playerLoaded: 0
   numberObstacles: 10
+  spread: 5
   cam1: {fileID: 0}
   cam2: {fileID: 0}
   score1: 0

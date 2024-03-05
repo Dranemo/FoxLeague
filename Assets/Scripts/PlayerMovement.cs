@@ -56,8 +56,8 @@ public class PlayerMovement : MonoBehaviour
         this.GetComponent<Animator>().SetFloat("MoveSpeed", speedAnim);
         if (gameObject.GetComponent<Player>().GetPlayerEnum() == Player.PlayerEnum.player2 || gameObject.GetComponent<Player>().GetPlayerEnum() == Player.PlayerEnum.AI)
         {
-            //horizontalInput = Input.GetAxis("Horizontal2");
-            //verticalInput = Input.GetAxis("Vertical2");
+            horizontalInput = Input.GetAxis("Horizontal2");
+            verticalInput = Input.GetAxis("Vertical2");
         }
         else if (gameObject.GetComponent<Player>().GetPlayerEnum() == Player.PlayerEnum.player1)
         {
