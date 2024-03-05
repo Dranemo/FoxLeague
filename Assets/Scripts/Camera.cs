@@ -8,7 +8,9 @@ using static UnityEngine.GraphicsBuffer;
 
 public class CameraController : MonoBehaviour
 {
-    [SerializeField] private float mouseSensitivity = 100f;
+    [SerializeField] private float mouseSensitivity = 500f;
+    [SerializeField] private float ctrlSensitivity = 500f;
+
     [SerializeField] private Transform playerBody;
     [SerializeField] private Vector3 cameraBody;
 
@@ -71,8 +73,8 @@ public class CameraController : MonoBehaviour
 
             if (!camOnBall)
             {
-                rotationX = Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime;
-                rotationY = Input.GetAxis("Mouse Y") * mouseSensitivity * Time.deltaTime;
+                rotationX = Input.GetAxis("ControllerX") * ctrlSensitivity * Time.deltaTime;
+                rotationY = Input.GetAxis("ControllerY") * ctrlSensitivity * Time.deltaTime;
             }
         }
 
@@ -102,7 +104,7 @@ public class CameraController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (!camOnBall && enumP == Player.PlayerEnum.player1)
+        if (!camOnBall)
         {
             xRotationCamera -= rotationY;
             xRotationCamera = Mathf.Clamp(xRotationCamera, -90f, 90f);

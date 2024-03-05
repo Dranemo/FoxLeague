@@ -228,7 +228,7 @@ public class GameManager : MonoBehaviour
                 int selectedIndex = Random.Range(0, position.Count);
                 Vector3 point = position[selectedIndex];
 
-                int tries = 40;
+                int tries = 400;
                 while (tries-- > 0)
                 {
 
