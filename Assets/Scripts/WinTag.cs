@@ -1,18 +1,26 @@
-using System.Collections;
+/*using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class WinTag : MonoBehaviour
 {
-    // Start is called before the first frame update
+
     void Start()
     {
-        
+        ScoreManager.GetInstance();
+
+        string winnerTag = winTag;
+
+        // Afficher le tag du gagnant dans le composant Text
+        if (winnerText != null)
+        {
+            winnerText.text = "Le joueur gagnant est : " + winnerTag;
+        }
     }
 
-    // Update is called once per frame
-    void Update()
+    string DetermineWinnerTag()
     {
-        
+        return "Player1";
     }
 }
+*/
