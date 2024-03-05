@@ -139,6 +139,14 @@ public class GameManager : MonoBehaviour
         player2.transform.GetComponent<Rigidbody>().isKinematic = booleen;
     }
 
+    public void ParticleSystem(Vector3 ballPosition)
+    {
+        GameObject particle = new GameObject();
+        particle=GameObject.FindObjectOfType<ParticleSystem>().gameObject;
+        particle.transform.position = ballPosition;
+        particle.GetComponent<ParticleSystem>().Play();
+    }
+
     private void GenerateTerrain()
     {
         GenerateOverlay();
@@ -366,6 +374,7 @@ public class GameManager : MonoBehaviour
             ball.GetComponent<Ball>().isGoaled = true;
             //Mettre tout en pause
             allKinetic(true);
+            ParticleSystem(ball.transform.position);
             scoreCanvaManager.timePause = true;
 
             AddScore(playerId);
