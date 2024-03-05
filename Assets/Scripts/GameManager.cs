@@ -283,9 +283,11 @@ public class GameManager : MonoBehaviour
                 return new Vector3(randomPoint.x, 0, randomPoint.y) * spread;
             }
 
-            GameObject GetPrefab(int prefabIndex)
+            GameObject GetPrefab()
             {
-                switch (prefabIndex)
+                int prefabGenerated = Random.Range(0, 5); // Quel prefab ?
+
+                switch (prefabGenerated)
                 {
                     case 0: // Birch tree
                         return birchTree;
@@ -306,8 +308,7 @@ public class GameManager : MonoBehaviour
             {
                 GameObject itemCreated = null;
 
-                int prefabGenerated = Random.Range(0, 5); // Quel prefab ?
-                itemCreated = Instantiate(GetPrefab(prefabGenerated), newPos, Quaternion.Euler(0, Random.Range(0, 360), 0));
+                itemCreated = Instantiate(GetPrefab(), newPos, Quaternion.Euler(0, Random.Range(0, 360), 0));
                 itemCreated.tag = "Obstacle";
                 itemCreated.name = "item" + i;
 
