@@ -119,8 +119,7 @@ public class PlayerMovement : MonoBehaviour
 
 
 
-        Debug.Log(movementX + movementZ);
-        if (boostInput && boost > 0 && canBoost && !speedChangedBool && (movementX != Vector3.zero && movementZ != Vector3.zero))
+        if (boostInput && boost > 0 && canBoost && !speedChangedBool && (movementX + movementZ != Vector3.zero))
         {
             speedActual *= 2;
             speedChangedBool = true;

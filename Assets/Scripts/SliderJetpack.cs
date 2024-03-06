@@ -8,10 +8,12 @@ public class SliderJetpack : MonoBehaviour
     public Slider mainSlider2;
 
     public PlayerMovement playerMovement;
+    public PlayerMovement playerMovement2;
 
     void Start()
     {
         playerMovement = GameObject.FindWithTag("Player").GetComponent<PlayerMovement>();
+        playerMovement2 = GameObject.FindWithTag("Player2").GetComponent<PlayerMovement>();
         mainSlider1 = this.transform.Find("SliderP1").GetComponent<Slider>();
         mainSlider2 = this.transform.Find("SliderP2").GetComponent<Slider>();
 
@@ -23,10 +25,9 @@ public class SliderJetpack : MonoBehaviour
 
     void Update()
     {
-        if (playerMovement != null) 
-        {
-            float normalizedFlyBoost = Mathf.Clamp(playerMovement.GetBoost(), 0f, 100f);
-            mainSlider1.value = normalizedFlyBoost;
-        }
+        float normalizedFlyBoost = Mathf.Clamp(playerMovement.GetBoost(), 0f, 100f);
+        mainSlider1.value = normalizedFlyBoost;
+        normalizedFlyBoost = Mathf.Clamp(playerMovement2.GetBoost(), 0f, 100f);
+        mainSlider2.value = normalizedFlyBoost;
     }
 }
