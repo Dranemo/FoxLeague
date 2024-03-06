@@ -14,6 +14,7 @@ public class Music : MonoBehaviour
         }
         else
         {
+            Debug.Log("music");
             Destroy(gameObject);
         }
     }
