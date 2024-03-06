@@ -25,7 +25,7 @@ public class SliderJetpack : MonoBehaviour
     {
         if (playerMovement != null) 
         {
-            float normalizedFlyBoost = Mathf.Clamp(playerMovement.GetFlyBoost(), 0f, 100f);
+            float normalizedFlyBoost = Mathf.Clamp(playerMovement.GetBoost(), 0f, 100f);
             mainSlider1.value = normalizedFlyBoost;
         }
     }

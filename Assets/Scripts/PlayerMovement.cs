@@ -4,14 +4,29 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using UnityEngine.Rendering;
+using UnityEngine.UIElements;
 
 public class PlayerMovement : MonoBehaviour
 {
-    [SerializeField] private float speed = 1000f; 
-    [SerializeField] private float jumpSpeed = 100.0f;
-    [SerializeField] private float flyBoost = 100.0f;
-    [SerializeField] private float flySpeed = 100.0f;
+    [SerializeField] private float speedNormal = 1250;
+    [SerializeField] private float speedFlying = 700;
+    [SerializeField] private float speedActual = 1250;
+
+    [SerializeField] private float jumpSpeed = 100f;
+    [SerializeField] private float boost = 100.0f;
+    [SerializeField] private float flySpeed = 1500f;
     private bool canJump = false;
+    bool canBoost = true;
+    bool isBoostring = false;
+
+
+    float horizontalInput = 0f;
+    float verticalInput = 0f;
+    bool jumpInput = false;
+    bool boostInput = false;
+
+    bool boostInputReleased = true;
 
 
     private Rigidbody rb;
@@ -21,16 +36,21 @@ public class PlayerMovement : MonoBehaviour
     Vector3 jumpVector = Vector3.zero;
     Vector3 jumpBoostVector = Vector3.zero;
 
-    public float GetFlyBoost()
+    public float GetBoost()
     {
-        return flyBoost;
+        return boost;
     }
-    public void SetFlyBoost(float set)
+    public void SetBoost(float set)
     {
-        flyBoost = set;
+        boost = set;
     }
 
 
+
+    private float cameraDistortionBoost = 90f;
+    private float cameraDistortionNormal = 60f;
+    private float cameraDistortionActual = 60f;
+    private bool speedChangedBool = false;
 
 
 
@@ -42,9 +62,6 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
-        float horizontalInput = 0f;
-        float verticalInput = 0f;
-        bool jumpInput = false;
         float speedAnim = GetComponent<Rigidbody>().velocity.magnitude;
         this.GetComponent<Animator>().SetFloat("MoveSpeed", speedAnim);
 
@@ -55,45 +72,112 @@ public class PlayerMovement : MonoBehaviour
             horizontalInput = Input.GetAxis("Horizontal2");
             verticalInput = Input.GetAxis("Vertical2");
             jumpInput = Input.GetButton("Jump2");
+            boostInput = Input.GetButton("Boost2");
+
+            boostInputReleased = Input.GetButtonUp("Boost2");
         }
         else if (gameObject.GetComponent<Player>().GetPlayerEnum() == Player.PlayerEnum.player1)
         {
             horizontalInput = Input.GetAxis("Horizontal");
             verticalInput = Input.GetAxis("Vertical");
             jumpInput = Input.GetButton("Jump");
+            boostInput = Input.GetButton("Boost");
+
+            boostInputReleased = Input.GetButtonUp("Boost");
         }
 
+
         // Mouvement
-        movementZ = transform.TransformDirection(Vector3.forward) * verticalInput * speed;
-        movementX = transform.TransformDirection(Vector3.right) * horizontalInput * speed;
+        movementZ = transform.TransformDirection(Vector3.forward) * verticalInput * speedActual;
+        movementX = transform.TransformDirection(Vector3.right) * horizontalInput * speedActual;
 
 
+
+
+        // Vecteurs déplacements saut & fly
         if (jumpInput && canJump)
         {
             jumpVector = Vector3.up * jumpSpeed;
+            canJump = false;
         }
-
-        else if (canJump)
-        {
-            speed = 1250f;
-        }
-
-        else if (!canJump && jumpInput && flyBoost > 0)
+        else if (!canJump && jumpInput && boost > 0)
         {
             jumpBoostVector = Vector3.up * flySpeed;
         }
 
 
+        // Changement de vitesse
+        if (canJump && speedActual == speedFlying)
+        {
+            speedActual = speedNormal;
+        }
+        if(!canJump && speedActual == speedNormal)
+        {
+            speedActual = speedFlying;
+        }
 
 
-        
+
+
+
+        if (boostInput && boost > 0 && canBoost && !speedChangedBool && (movementX != Vector3.zero && movementZ != Vector3.zero))
+        {
+            speedActual *= 2;
+            speedChangedBool = true;
+
+            isBoostring = true;
+
+        }
+        else
+        {
+            if((boost <= 0 || !boostInput) && speedChangedBool)
+            {
+                Debug.Log("aa");
+                canBoost = false;
+            }
+
+            if (!canBoost && speedChangedBool && isBoostring)
+            {
+                speedActual /= 2;
+                speedChangedBool = false;
+            }
+        }
+
+
+        if (boostInputReleased)
+        {
+            canBoost = true;
+            Debug.Log(canBoost);
+        }
+
+        // Collision avec un objet en dessous
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position + (Vector3.up * 0.1f), Vector3.down, out hit, 1f))
+        {
+            if ((hit.collider.CompareTag("Floor") || hit.collider.CompareTag("Obstacle")) && !speedChangedBool)
+            {
+                // Refill the jetpack fuel
+                RefillBoost();
+                if (!canJump)
+                {
+                    canJump = true;
+                }
+                GetComponent<Rigidbody>().drag = 1.5f;
+                this.GetComponent<Animator>().SetBool("Jump", false);
+            }
+        }
+
+
+
+
+
     }
 
 
-    void RefillJetpack()
+    void RefillBoost()
     {
-        flyBoost += 100 * Time.deltaTime;
-        flyBoost = Mathf.Clamp(flyBoost, 0f, 100);
+        boost += 100 * Time.deltaTime;
+        boost = Mathf.Clamp(boost, 0f, 100);
     }
 
     private void FixedUpdate()
@@ -107,43 +191,44 @@ public class PlayerMovement : MonoBehaviour
         {
             rb.AddForce(jumpVector, ForceMode.Impulse);
             jumpVector = Vector3.zero;
-            canJump = false;
 
             this.GetComponent<Animator>().SetBool("Jump", true);
             GetComponent<Rigidbody>().drag = 0.5f;
-            speed = 625f;
         }
 
         //Fly
         if (jumpBoostVector != Vector3.zero)
         {
             rb.AddForce(jumpBoostVector, ForceMode.Force);
-            flyBoost -= 1;
+            boost -= 1 * Time.deltaTime * 100;
             jumpBoostVector = Vector3.zero;
         }
 
-
-
-
-
-        // Collision avec le un truc en dessous
-        RaycastHit hit;
-        if (Physics.Raycast(transform.position, Vector3.down, out hit, 1f))
+        // Boost Camera Distortion
+        if(speedChangedBool)
         {
-            if (hit.collider.CompareTag("Floor") || hit.collider.CompareTag("Obstacle"))
+            if (cameraDistortionActual < cameraDistortionBoost)
             {
-                // Refill the jetpack fuel
-                RefillJetpack();
-                if (!canJump)
-                {
-                    canJump = true;
-                }
-                GetComponent<Rigidbody>().drag = 1.5f;
-                this.GetComponent<Animator>().SetBool("Jump", false);
+                cameraDistortionActual += Time.deltaTime * 100;
+            }
+            else
+            {
+                cameraDistortionActual = cameraDistortionBoost;
+            }
+            boost -= Time.deltaTime * 50;
+        }
+        else if (!speedChangedBool)
+        {
+            if (cameraDistortionActual > cameraDistortionNormal)
+            {
+                cameraDistortionActual -= Time.deltaTime * 100;
+            }
+            else
+            {
+                cameraDistortionActual = cameraDistortionNormal;
             }
         }
-
-
+        transform.Find("PlayerCamera").GetComponent<Camera>().fieldOfView = cameraDistortionActual;
     }
 }
 

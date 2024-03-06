@@ -105,12 +105,12 @@ public class GameManager : MonoBehaviour
         //Reset le joueur 1
         player.transform.position = playerPos.transform.position;
         player.transform.LookAt(new Vector3(0, 0, 1));
-        player.GetComponent<PlayerMovement>().SetFlyBoost(100);
+        player.GetComponent<PlayerMovement>().SetBoost(100);
 
         //Reset le joueur 2 ou l'IA
         player2.transform.position = player2Pos.transform.position;
         player2.transform.LookAt(new Vector3(0, 0, -1));
-        player2.GetComponent<PlayerMovement>().SetFlyBoost(100);
+        player2.GetComponent<PlayerMovement>().SetBoost(100);
 
 
         allKinetic(false);
