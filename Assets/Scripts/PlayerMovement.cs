@@ -71,10 +71,12 @@ public class PlayerMovement : MonoBehaviour
         if (jumpInput && canJump)
         {
             jumpVector = Vector3.up * jumpSpeed;
+            this.GetComponent<Animator>().SetBool("Jump", true);
         }
 
         else if (canJump)
         {
+            this.GetComponent<Animator>().SetBool("Land", true);
             speed = 1250f;
         }
 
@@ -109,7 +111,6 @@ public class PlayerMovement : MonoBehaviour
             jumpVector = Vector3.zero;
             canJump = false;
 
-            this.GetComponent<Animator>().SetBool("Jump", true);
             GetComponent<Rigidbody>().drag = 0.5f;
             speed = 625f;
         }
@@ -126,7 +127,7 @@ public class PlayerMovement : MonoBehaviour
 
 
 
-        // Collision avec le un truc en dessous
+        // Collision avec sol/obstacle en dessous
         RaycastHit hit;
         if (Physics.Raycast(transform.position, Vector3.down, out hit, 1f))
         {
@@ -134,6 +135,7 @@ public class PlayerMovement : MonoBehaviour
             {
                 // Refill the jetpack fuel
                 RefillJetpack();
+                this.GetComponent<Animator>().SetBool("Land", false);
                 if (!canJump)
                 {
                     canJump = true;
