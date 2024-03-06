@@ -76,7 +76,6 @@ public class PlayerMovement : MonoBehaviour
 
         else if (canJump)
         {
-            this.GetComponent<Animator>().SetBool("Land", true);
             speed = 1250f;
         }
 
@@ -135,7 +134,6 @@ public class PlayerMovement : MonoBehaviour
             {
                 // Refill the jetpack fuel
                 RefillJetpack();
-                this.GetComponent<Animator>().SetBool("Land", false);
                 if (!canJump)
                 {
                     canJump = true;
