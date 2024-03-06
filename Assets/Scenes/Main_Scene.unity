@@ -155,7 +155,7 @@ AudioSource:
   m_Volume: 1
   m_Pitch: 1
   Loop: 1
-  Mute: 1
+  Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
   Priority: 128
@@ -245,7 +245,7 @@ Transform:
   m_GameObject: {fileID: 139012819}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.82, y: 12.43, z: 0.61}
+  m_LocalPosition: {x: 0, y: 12, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5075,7 +5075,7 @@ Transform:
   m_GameObject: {fileID: 170036710}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.06620169, y: -224.6, z: -24.92505}
+  m_LocalPosition: {x: 0, y: -224.6, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5115,7 +5115,7 @@ Transform:
   m_GameObject: {fileID: 349183576}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -6.629738, y: 32.93064, z: 13.600169}
+  m_LocalPosition: {x: 0, y: 12, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5424,14 +5424,17 @@ MonoBehaviour:
     type: 3}
   goalPrefab: {fileID: 8872423478649563501, guid: ec983b8a225c85d4198ed4bfcb8320a2,
     type: 3}
-  playerNumber: 1
+  playerNumber: 2
   playerLoaded: 0
   numberObstacles: 10
-  spread: 5
+  spread: 25
+  minDistance: 15
   cam1: {fileID: 0}
   cam2: {fileID: 0}
   score1: 0
   score2: 0
+  WinP1: 0
+  WinP2: 0
 --- !u!4 &2060071076
 Transform:
   m_ObjectHideFlags: 0

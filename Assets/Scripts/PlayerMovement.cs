@@ -119,7 +119,7 @@ public class PlayerMovement : MonoBehaviour
 
 
 
-
+        Debug.Log(movementX + movementZ);
         if (boostInput && boost > 0 && canBoost && !speedChangedBool && (movementX != Vector3.zero && movementZ != Vector3.zero))
         {
             speedActual *= 2;
@@ -143,11 +143,10 @@ public class PlayerMovement : MonoBehaviour
             }
         }
 
-
+        // Savoir si la touche de sprint est relachée
         if (boostInputReleased)
         {
             canBoost = true;
-            Debug.Log(canBoost);
         }
 
         // Collision avec un objet en dessous
@@ -192,7 +191,6 @@ public class PlayerMovement : MonoBehaviour
             rb.AddForce(jumpVector, ForceMode.Impulse);
             jumpVector = Vector3.zero;
 
-            this.GetComponent<Animator>().SetBool("Jump", true);
             GetComponent<Rigidbody>().drag = 0.5f;
         }
 

@@ -54,12 +54,15 @@ public class GameManager : MonoBehaviour
     [SerializeField] public int score1 = 0;
     [SerializeField] public int score2 = 0;
 
-    private int WinP1 = 0;
-    private int WinP2 = 0;
+    public int WinP1 = 0;
+    public int WinP2 = 0;
 
     private bool canAddTime = true;
 
-
+    void Awake()
+    {
+        DontDestroyOnLoad(this.gameObject);
+    }
     public static GameManager GetInstance()
     {
         if (instance)
@@ -350,7 +353,7 @@ public class GameManager : MonoBehaviour
             ball.GetComponent<Ball>().isGoaled = true;
             //Mettre tout en pause
             allKinetic(true);
-            //ParticleSystem(ball.transform.position);
+            ParticleSystem(ball.transform.position);
             scoreCanvaManager.timePause = true;
 
             AddScore(playerId);

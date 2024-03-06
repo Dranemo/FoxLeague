@@ -47,10 +47,7 @@ public class Ball : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Ball"))
-        {
-            audioSource.Play();
-        }
+        audioSource.Play();
 
         if (collision.transform.CompareTag("Player") || collision.transform.CompareTag("Player2"))
         {
