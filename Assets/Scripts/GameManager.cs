@@ -146,7 +146,7 @@ public class GameManager : MonoBehaviour
 
     public void ParticleSystem(Vector3 ballPosition)
     {
-        GameObject particle = new GameObject();
+        GameObject particle;
         particle=GameObject.FindObjectOfType<ParticleSystem>().gameObject;
         particle.transform.position = ballPosition;
         particle.GetComponent<ParticleSystem>().Play();
