@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Runtime.CompilerServices;
+using Unity.VisualScripting;
 using UnityEditor.Experimental.GraphView;
 using UnityEditor.Profiling.Memory.Experimental;
 using UnityEngine;
@@ -44,6 +45,8 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private Transform cam1;
     [SerializeField] private Transform cam2;
+    private GameObject cameraBallGoal;
+    private GameObject canva;
 
 
     private static GameManager instance;
@@ -85,19 +88,22 @@ public class GameManager : MonoBehaviour
     {
         scene = GameObject.Find("Scene");
 
-        ballPos = scene.transform.Find("BallStartPosition");
-        playerPos = scene.transform.Find("PlayerStartPosition");
-        player2Pos = scene.transform.Find("Player2StartPosition");
-        goal1Pos = scene.transform.Find("GoalStartPosition");
-        goal2Pos = scene.transform.Find("Goal2StartPosition");
+        ballPos = scene.transform.Find("Positions").Find("BallStartPosition");
+        playerPos = scene.transform.Find("Positions").Find("PlayerStartPosition");
+        player2Pos = scene.transform.Find("Positions").Find("Player2StartPosition");
+        goal1Pos = scene.transform.Find("Positions").Find("GoalStartPosition");
+        goal2Pos = scene.transform.Find("Positions").Find("Goal2StartPosition");
 
-        particle = FindObjectOfType<ParticleSystem>().gameObject;
+        cameraBallGoal = scene.transform.Find("CameraGoal").gameObject;
+        particle = scene.transform.Find("ParticleSystem").gameObject;
 
         GenerateTerrain();
 
         scoreCanvaManager = ScoreCanvaManager.GetInstance();
 
         FindItems();
+
+        canva = FindObjectOfType<Canvas>().gameObject;
 
         ResetPositions();
     }
@@ -120,6 +126,20 @@ public class GameManager : MonoBehaviour
         player2.transform.position = player2Pos.transform.position;
         player2.transform.LookAt(new Vector3(0, 0, -1));
         player2.GetComponent<PlayerMovement>().SetBoost(100);
+
+        //Reset camera et particules
+        particle.transform.position = Vector3.down * 40;
+        cameraBallGoal.transform.position = Vector3.down * 40; 
+
+        Rect tempRect = cameraBallGoal.GetComponent<Camera>().rect; // Deplacer le render
+        tempRect.x = 1f;
+        cameraBallGoal.GetComponent<Camera>().rect = tempRect;
+
+
+        // Reset éléments sur le canva
+        canva.transform.Find("Minimap").GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -90);
+        canva.transform.Find("Time").GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -185);
+        canva.transform.Find("BorderTime").GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -185);
 
 
         allKinetic(false);
@@ -145,9 +165,9 @@ public class GameManager : MonoBehaviour
         player2.transform.GetComponent<Rigidbody>().isKinematic = booleen;
     }
 
-    public void ParticleSystem(Vector3 ballPosition, Goal.PlayerGoal playerGoal)
+    private void ParticleSystem(Goal.PlayerGoal playerGoal)
     {
-        particle.transform.position = ballPosition;
+        particle.transform.position = ball.transform.position;
         
         if(playerGoal == Goal.PlayerGoal.Player_2)
         {
@@ -159,6 +179,27 @@ public class GameManager : MonoBehaviour
         }
 
         particle.GetComponent<ParticleSystem>().Play();
+    }
+
+    private void CamGoal(Goal.PlayerGoal playerGoal)
+    {
+        if(playerGoal == Goal.PlayerGoal.Player_1)
+        {
+            cameraBallGoal.transform.position = goal1Pos.position + new Vector3(10, 10, 20);
+        }
+        else
+        {
+            cameraBallGoal.transform.position = goal2Pos.position + new Vector3(-10, 10, -20);
+        }
+
+        cameraBallGoal.transform.LookAt(ball.transform.position);
+        Rect tempRect = cameraBallGoal.GetComponent<Camera>().rect; // Deplacer le render
+        tempRect.x = 0f;
+        cameraBallGoal.GetComponent<Camera>().rect = tempRect;
+
+        canva.transform.Find("Minimap").GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 200);
+        canva.transform.Find("Time").GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -20);
+        canva.transform.Find("BorderTime").GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -20);
     }
 
     private void GenerateTerrain()
@@ -233,6 +274,8 @@ public class GameManager : MonoBehaviour
             obstaclesList.Add(ballPos.gameObject);
             obstaclesList.Add(player2Pos.gameObject);
             obstaclesList.Add(playerPos.gameObject);
+            obstaclesList.Add(goal1Pos.gameObject);
+            obstaclesList.Add(goal2Pos.gameObject);
 
 
 
@@ -362,8 +405,12 @@ public class GameManager : MonoBehaviour
             ball.GetComponent<Ball>().isGoaled = true;
             //Mettre tout en pause
             allKinetic(true);
-            ParticleSystem(ball.transform.position, playerGoal);
             scoreCanvaManager.timePause = true;
+
+            // Effets
+            ParticleSystem(playerGoal);
+            CamGoal(playerGoal);
+
 
             AddScore(playerGoal);
 
