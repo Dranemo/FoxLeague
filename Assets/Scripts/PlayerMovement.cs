@@ -16,6 +16,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float jumpSpeed = 100f;
     [SerializeField] private float boost = 100.0f;
     [SerializeField] private float flySpeed = 1500f;
+    [SerializeField] private int distanceFrappe = 8;
     private bool canJump = false;
     bool canBoost = true;
     bool isBoostring = false;
@@ -25,11 +26,13 @@ public class PlayerMovement : MonoBehaviour
     float verticalInput = 0f;
     bool jumpInput = false;
     bool boostInput = false;
+    bool frappeInput = false;
 
     bool boostInputReleased = true;
 
 
     private Rigidbody rb;
+    private GameObject ball;
 
     Vector3 movementX;
     Vector3 movementZ;
@@ -59,6 +62,11 @@ public class PlayerMovement : MonoBehaviour
         rb = GetComponent<Rigidbody>();
     }
 
+    private void Start()
+    {
+        ball = FindObjectOfType<Ball>().gameObject;
+    }
+
 
     private void Update()
     {
@@ -73,6 +81,7 @@ public class PlayerMovement : MonoBehaviour
             verticalInput = Input.GetAxis("Vertical2");
             jumpInput = Input.GetButton("Jump2");
             boostInput = Input.GetButton("Boost2");
+            frappeInput = Input.GetButtonDown("Frappe2");
 
             boostInputReleased = Input.GetButtonUp("Boost2");
         }
@@ -82,6 +91,7 @@ public class PlayerMovement : MonoBehaviour
             verticalInput = Input.GetAxis("Vertical");
             jumpInput = Input.GetButton("Jump");
             boostInput = Input.GetButton("Boost");
+            frappeInput = Input.GetButtonDown("Frappe");
 
             boostInputReleased = Input.GetButtonUp("Boost");
         }
@@ -117,8 +127,23 @@ public class PlayerMovement : MonoBehaviour
         }
 
 
+        // Frappe
+        if (frappeInput)
+        {
+            if (Vector3.Distance(transform.position, ball.transform.position) <= distanceFrappe)
+            {
+                ball.GetComponent<Rigidbody>().AddForce((ball.transform.position - transform.position).normalized * 100);
+                boost -= 30;
+            }
+            else
+            {
+                Debug.Log(Vector3.Distance(transform.position, ball.transform.position));
+            }
+        }
 
 
+
+        // Sprint
         if (boostInput && boost > 0 && canBoost && !speedChangedBool && (movementX + movementZ != Vector3.zero))
         {
             speedActual *= 2;
