@@ -264,6 +264,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerGoal: 0
+  redMat: {fileID: 2100000, guid: 75591428178e14744a7d181fac884e90, type: 2}
+  blueMat: {fileID: 2100000, guid: 36566961767c0754dbed99da52522f26, type: 2}
 --- !u!1001 &8564442613671059222
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -372,7 +374,8 @@ PrefabInstance:
       propertyPath: m_LocalRotation.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: -4683669308469848369, guid: 6c16a2b0f188c7544a737f55de27befc, type: 3}
     m_RemovedGameObjects:
     - {fileID: 65702495048144492, guid: 6c16a2b0f188c7544a737f55de27befc, type: 3}
     m_AddedGameObjects: []
@@ -381,6 +384,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 8685415787416604314}
+    - targetCorrespondingSourceObject: {fileID: -8391222552659086748, guid: 6c16a2b0f188c7544a737f55de27befc,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7170752820074528663}
     - targetCorrespondingSourceObject: {fileID: -516098083770646512, guid: 6c16a2b0f188c7544a737f55de27befc,
         type: 3}
       insertIndex: -1
@@ -448,3 +455,56 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: -5495902117074765545, guid: 6c16a2b0f188c7544a737f55de27befc, type: 3}
+--- !u!137 &7170752820074528663
+SkinnedMeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9031793827732974962}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 3
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2576956483768403278, guid: 6c16a2b0f188c7544a737f55de27befc, type: 3}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  serializedVersion: 2
+  m_Quality: 0
+  m_UpdateWhenOffscreen: 0
+  m_SkinnedMotionVectors: 1
+  m_Mesh: {fileID: -5495902117074765545, guid: 6c16a2b0f188c7544a737f55de27befc, type: 3}
+  m_Bones: []
+  m_BlendShapeWeights: []
+  m_RootBone: {fileID: 0}
+  m_AABB:
+    m_Center: {x: -0.00028264523, y: 0, z: 1.2186741}
+    m_Extent: {x: 3.1615853, y: 1.3406826, z: 1.2601646}
+  m_DirtyAABB: 0

@@ -37,7 +37,7 @@ public class Player : MonoBehaviour
         numberPlayer = gameManager.playerNumber;
 
 
-            /*Transform chapo = go.transform.Find("Chapo").Find("ChapoModel");*/
+            Transform chapo = go.transform.Find("animal_people_beanie_wolf_1_onWear_WithAccessoryLogic").Find("animal_people_beanie_wolf_1_onWear_WithAccessoryLogic");
             Transform camera = go.transform.Find("PlayerCamera");
             camera.tag = "MainCamera";
 
@@ -52,7 +52,7 @@ public class Player : MonoBehaviour
                 go.name = "Player1";
                 go.tag = "Player";
 
-                //chapo.GetComponent<SkinnedMeshRenderer>().material = blueMat; // Mettre la couleur du chapo
+                chapo.GetComponent<SkinnedMeshRenderer>().material = blueMat; // Mettre la couleur du chapo
 
                 if (numberPlayer == 1)
                 {
@@ -68,7 +68,7 @@ public class Player : MonoBehaviour
                 playerLayer = 7;
 
 
-                //chapo.GetComponent<SkinnedMeshRenderer>().material = redMat; // Mettre la couleur du chapo
+                chapo.GetComponent<SkinnedMeshRenderer>().material = redMat; // Mettre la couleur du chapo
 
                 if (numberPlayer == 2)
                 {
