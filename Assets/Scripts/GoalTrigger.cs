@@ -18,16 +18,19 @@ public class GoalTrigger : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
+
+        PlayerGoal goal = transform.parent.GetComponent<Goal>().GetGoal();
         audioSource.Play();
+
         if (other.CompareTag("Ball"))
         {
-            if (transform.parent.GetComponent<Goal>().GetGoal() == PlayerGoal.Player_2) 
+            if (goal == PlayerGoal.Player_2) 
             {
-                StartCoroutine(GameManager.GetInstance().GoalDone(1));
+                StartCoroutine(GameManager.GetInstance().GoalDone(goal));
             }
-            else if (transform.parent.GetComponent<Goal>().GetGoal() == PlayerGoal.Player_1)
+            else if (goal == PlayerGoal.Player_1)
             {
-                StartCoroutine(GameManager.GetInstance().GoalDone(2));
+                StartCoroutine(GameManager.GetInstance().GoalDone(goal));
             }
         }
 

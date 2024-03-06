@@ -8,8 +8,10 @@ public class Goal : MonoBehaviour
     public enum PlayerGoal { Player_1,Player_2 }
     [SerializeField] private PlayerGoal playerGoal;
 
-    [SerializeField] Material redMat;
-    [SerializeField] Material blueMat;
+    Material redMat;
+    Material blueMat;
+
+    GameManager gameManager;
 
     public void SetGoal(PlayerGoal _playerGoal)
     {
@@ -19,6 +21,15 @@ public class Goal : MonoBehaviour
     public PlayerGoal GetGoal()
     {
         return playerGoal;
+    }
+
+    private void Awake()
+    {
+        gameManager = GameManager.GetInstance();
+
+
+        blueMat = gameManager.blueMat;
+        redMat = gameManager.redMat;
     }
 
     private void Start()

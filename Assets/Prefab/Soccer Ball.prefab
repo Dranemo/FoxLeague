@@ -151,9 +151,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isGoaled: 0
   forceCollision: 15
-  RedTrail: {fileID: 2100000, guid: 75591428178e14744a7d181fac884e90, type: 2}
-  BlueTrail: {fileID: 2100000, guid: 36566961767c0754dbed99da52522f26, type: 2}
-  GrayTrail: {fileID: 2100000, guid: daa5d3741a18c354fa49531a19085969, type: 2}
+  grayTrail: {fileID: 2100000, guid: daa5d3741a18c354fa49531a19085969, type: 2}
   ballSound: {fileID: 8300000, guid: 6f5917cc410400546802c8b7db5fe3cb, type: 3}
 --- !u!96 &7223528893130457629
 TrailRenderer:

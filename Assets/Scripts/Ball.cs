@@ -9,15 +9,21 @@ public class Ball : MonoBehaviour
 
     [SerializeField] private float forceCollision = 10.0f;
 
-    [SerializeField] private Material RedTrail;
-    [SerializeField] private Material BlueTrail;
-    [SerializeField] private Material GrayTrail;
+    private Material redTrail;
+    private Material blueTrail;
+    [SerializeField] private Material grayTrail;
     public AudioClip ballSound;
     private AudioSource audioSource;
+
+    GameManager gameManager;
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
+        gameManager = GameManager.GetInstance();
+
+        redTrail = gameManager.redMat;
+        blueTrail = gameManager.blueMat;
     }
     void Start()
     {
@@ -33,15 +39,15 @@ public class Ball : MonoBehaviour
     {
         if(transform.position.z >= 15) // Droite
         {
-            GetComponent<TrailRenderer>().material = RedTrail;
+            GetComponent<TrailRenderer>().material = redTrail;
         }
         else if (transform.position.z <= -15) // Gauche
         {
-            GetComponent<TrailRenderer>().material = BlueTrail;
+            GetComponent<TrailRenderer>().material = blueTrail;
         }
         else // Mid
         {
-            GetComponent<TrailRenderer>().material = GrayTrail;
+            GetComponent<TrailRenderer>().material = grayTrail;
         }
     }
 

@@ -31,6 +31,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject canvaPrefab;
     [SerializeField] private GameObject goalPrefab;
 
+    [SerializeField] public Material redMat;
+    [SerializeField] public Material blueMat;
+
 
     [SerializeField, Range(1,2)] public int playerNumber = 2;
     public int playerLoaded = 0;
@@ -49,6 +52,8 @@ public class GameManager : MonoBehaviour
     private GameObject player;
     private GameObject player2;
     private GameObject obstacles;
+
+    private GameObject particle;
 
     ScoreCanvaManager scoreCanvaManager;
     [SerializeField] public int score1 = 0;
@@ -86,6 +91,7 @@ public class GameManager : MonoBehaviour
         goal1Pos = scene.transform.Find("GoalStartPosition");
         goal2Pos = scene.transform.Find("Goal2StartPosition");
 
+        particle = FindObjectOfType<ParticleSystem>().gameObject;
 
         GenerateTerrain();
 
@@ -120,11 +126,6 @@ public class GameManager : MonoBehaviour
         scoreCanvaManager.PauseUnpauseTime(false);
     }
 
-    public void RepositionItems()
-    {
-        playerLoaded = 0;
-    }
-
     private void FindItems()
     {
         player = GameObject.FindWithTag("Player");
@@ -144,11 +145,19 @@ public class GameManager : MonoBehaviour
         player2.transform.GetComponent<Rigidbody>().isKinematic = booleen;
     }
 
-    public void ParticleSystem(Vector3 ballPosition)
+    public void ParticleSystem(Vector3 ballPosition, Goal.PlayerGoal playerGoal)
     {
-        GameObject particle;
-        particle=GameObject.FindObjectOfType<ParticleSystem>().gameObject;
         particle.transform.position = ballPosition;
+        
+        if(playerGoal == Goal.PlayerGoal.Player_2)
+        {
+            particle.GetComponent<ParticleSystemRenderer>().material = blueMat;
+        }
+        else
+        {
+            particle.GetComponent<ParticleSystemRenderer>().material = redMat;
+        }
+
         particle.GetComponent<ParticleSystem>().Play();
     }
 
@@ -329,14 +338,14 @@ public class GameManager : MonoBehaviour
 
 
     // --------------------------- SCORES --------------------------- //
-    public void AddScore(int playerId)
+    public void AddScore(Goal.PlayerGoal playerGoal)
     {
-        switch (playerId)
+        switch (playerGoal)
         {
-            case 1:
+            case Goal.PlayerGoal.Player_2:
                 score1++;
                 break;
-            case 2:
+            case Goal.PlayerGoal.Player_1:
                 score2++;
                 break;
             default:
@@ -346,17 +355,17 @@ public class GameManager : MonoBehaviour
         scoreCanvaManager.WriteCanvaScore(score1, score2);
     }
 
-    public IEnumerator GoalDone(int playerId)
+    public IEnumerator GoalDone(Goal.PlayerGoal playerGoal)
     {
         if (!ball.GetComponent<Ball>().isGoaled)
         {
             ball.GetComponent<Ball>().isGoaled = true;
             //Mettre tout en pause
             allKinetic(true);
-            ParticleSystem(ball.transform.position);
+            ParticleSystem(ball.transform.position, playerGoal);
             scoreCanvaManager.timePause = true;
 
-            AddScore(playerId);
+            AddScore(playerGoal);
 
             //
             for (float i = 1; i >= 0; i -= 0.025f)
@@ -409,7 +418,6 @@ public class GameManager : MonoBehaviour
 
             else
             {
-                RepositionItems();
                 scoreCanvaManager.ResetCanva();
             }
         }

@@ -10,8 +10,8 @@ public class Player : MonoBehaviour
     public enum PlayerEnum { player1, player2, AI };
     [SerializeField] private PlayerEnum playerEnum;
 
-    [SerializeField] private Material redMat;
-    [SerializeField] private Material blueMat;
+    private Material redMat;
+    private Material blueMat;
 
     private GameManager gameManager;
     private int numberPlayer;
@@ -30,14 +30,18 @@ public class Player : MonoBehaviour
     }
 
     private void Awake()
-    {
+    {        
         go = gameObject;
 
         gameManager = GameManager.GetInstance();
         numberPlayer = gameManager.playerNumber;
 
 
-            Transform chapo = go.transform.Find("animal_people_beanie_wolf_1_onWear_WithAccessoryLogic").Find("animal_people_beanie_wolf_1_onWear_WithAccessoryLogic");
+        blueMat = gameManager.blueMat;
+        redMat = gameManager.redMat;
+
+
+        Transform chapo = go.transform.Find("animal_people_beanie_wolf_1_onWear_WithAccessoryLogic").Find("animal_people_beanie_wolf_1_onWear_WithAccessoryLogic");
             Transform camera = go.transform.Find("PlayerCamera");
             camera.tag = "MainCamera";
 

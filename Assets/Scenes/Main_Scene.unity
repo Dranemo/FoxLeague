@@ -5331,6 +5331,8 @@ MonoBehaviour:
     type: 3}
   goalPrefab: {fileID: 8872423478649563501, guid: ec983b8a225c85d4198ed4bfcb8320a2,
     type: 3}
+  redMat: {fileID: 2100000, guid: 75591428178e14744a7d181fac884e90, type: 2}
+  blueMat: {fileID: 2100000, guid: 36566961767c0754dbed99da52522f26, type: 2}
   playerNumber: 2
   playerLoaded: 0
   numberObstacles: 10
