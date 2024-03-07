@@ -647,6 +647,7 @@ MonoBehaviour:
   boost: 100
   flySpeed: 1500
   distanceFrappe: 8
+  hitSound: {fileID: 8300000, guid: dc93eae7e604cc04f95afa74fb7499bb, type: 3}
 --- !u!114 &5906038673191115563
 MonoBehaviour:
   m_ObjectHideFlags: 0

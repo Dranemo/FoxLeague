@@ -57,7 +57,8 @@ public class PlayerMovement : MonoBehaviour
     private bool speedChangedBool = false;
     private Animator animator;
 
-
+    [SerializeField] private AudioClip hitSound;
+    private AudioSource audioSource;
 
     private void Awake()
     {
@@ -70,6 +71,12 @@ public class PlayerMovement : MonoBehaviour
     {
         ball = gameManager.ball;
         animator=GetComponent<Animator>();
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null)
+        {
+            audioSource = gameObject.AddComponent<AudioSource>();
+        }
+        audioSource.clip = hitSound;
     }
 
     private void Update()
@@ -138,6 +145,7 @@ public class PlayerMovement : MonoBehaviour
         {
             if (Vector3.Distance(transform.position, ball.transform.position) <= distanceFrappe && boost > 0)
             {
+                audioSource.Play();
                 ball.GetComponent<Rigidbody>().AddForce((ball.transform.position - transform.position).normalized * boost * 2);
                 boost = 0;
             }
