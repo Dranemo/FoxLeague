@@ -78,29 +78,6 @@ public class CameraController : MonoBehaviour
                 rotationY = Input.GetAxis("ControllerY") * ctrlSensitivity * Time.deltaTime;
             }
         }
-
-
-
-        
-
-
-
-
-
-        /*if (camInput && CompareTag("MainCamera"))
-        {
-            GameObject player = GameObject.FindWithTag("Player");
-            if ((transform.position-player.transform.position).magnitude < 2.1f)
-            {
-                transform.localPosition = cameraBody;
-            }
-            else
-            {
-                transform.localPosition = new Vector3(0,1f,0);
-            }
-        }*/
-
-
     }
 
     private void FixedUpdate()

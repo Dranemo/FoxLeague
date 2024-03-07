@@ -1,11 +1,4 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
-using UnityEngine.Rendering;
-using UnityEngine.UIElements;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -21,13 +14,13 @@ public class PlayerMovement : MonoBehaviour
     bool canBoost = true;
     bool isBoostring = false;
 
-
+    ScoreCanvaManager scoreCanvaManager;
     float horizontalInput = 0f;
     float verticalInput = 0f;
     bool jumpInput = false;
     bool boostInput = false;
     bool frappeInput = false;
-
+    bool pauseInput = false;
     bool boostInputReleased = true;
 
 
@@ -77,6 +70,7 @@ public class PlayerMovement : MonoBehaviour
             audioSource = gameObject.AddComponent<AudioSource>();
         }
         audioSource.clip = hitSound;
+        scoreCanvaManager = ScoreCanvaManager.GetInstance();
     }
 
     private void Update()
@@ -103,7 +97,7 @@ public class PlayerMovement : MonoBehaviour
             jumpInput = Input.GetButton("Jump");
             boostInput = Input.GetButton("Boost");
             frappeInput = Input.GetButtonDown("Frappe");
-
+            pauseInput = Input.GetButtonDown("Echap");
             boostInputReleased = Input.GetButtonUp("Boost");
         }
 
@@ -179,6 +173,19 @@ public class PlayerMovement : MonoBehaviour
                 speedActual /= 2;
                 speedChangedBool = false;
             }
+        }
+
+        //Pause
+
+        if (pauseInput)
+        {
+            gameManager.allKinetic(true);
+            scoreCanvaManager.PauseUnpauseTime(true);
+        }
+        else
+        {
+            gameManager.allKinetic(false);
+            scoreCanvaManager.PauseUnpauseTime(false);
         }
 
         // Savoir si la touche de sprint est relachée
