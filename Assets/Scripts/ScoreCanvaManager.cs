@@ -47,8 +47,6 @@ public class ScoreCanvaManager : MonoBehaviour
         ResetCanva();
     }
 
-
-
     public static ScoreCanvaManager GetInstance()
     {
         if (instance)
