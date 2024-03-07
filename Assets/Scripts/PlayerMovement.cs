@@ -33,6 +33,7 @@ public class PlayerMovement : MonoBehaviour
 
     private Rigidbody rb;
     private GameObject ball;
+    private GameManager gameManager;
 
     Vector3 movementX;
     Vector3 movementZ;
@@ -60,17 +61,15 @@ public class PlayerMovement : MonoBehaviour
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
-    }
 
-    private void Start()
-    {
-        ball = FindObjectOfType<Ball>().gameObject;
+        gameManager = GameManager.GetInstance();
+        ball = gameManager.ball;
     }
 
 
     private void Update()
     {
-        float speedAnim = GetComponent<Rigidbody>().velocity.magnitude;
+        float speedAnim = rb.velocity.magnitude;
         this.GetComponent<Animator>().SetFloat("MoveSpeed", speedAnim);
 
 

@@ -42,77 +42,96 @@ public class Player : MonoBehaviour
 
 
         Transform chapo = go.transform.Find("animal_people_beanie_wolf_1_onWear_WithAccessoryLogic").Find("animal_people_beanie_wolf_1_onWear_WithAccessoryLogic");
-            Transform camera = go.transform.Find("PlayerCamera");
-            camera.tag = "MainCamera";
+        Transform camera = go.transform.Find("PlayerCamera");
+        Transform arrow = camera.Find("3D RightArrow");
+        camera.tag = "MainCamera";
+ 
+        int playerLayer = 0;
+        int arrowLayerAdv = 0;
+ 
+ 
+        if (gameManager.playerLoaded == 0)
+        {
+ 
+            playerLayer = 6;
+            arrowLayerAdv = 9;
 
-            int playerLayer = 0;
 
 
-            if (gameManager.playerLoaded == 0)
+            go.name = "Player1";
+            go.tag = "Player";
+ 
+            chapo.GetComponent<SkinnedMeshRenderer>().material = blueMat; // Mettre la couleur du chapo
+            arrow.GetComponent<SkinnedMeshRenderer>().material = blueMat; // MEttre la couleur de la fleche
+
+
+            if (numberPlayer == 1)
             {
-
-                playerLayer = 6;
-
-                go.name = "Player1";
-                go.tag = "Player";
-
-                chapo.GetComponent<SkinnedMeshRenderer>().material = blueMat; // Mettre la couleur du chapo
-
-                if (numberPlayer == 1)
-                {
-                    Rect tempRect = camera.GetComponent<Camera>().rect; // Deplacer le render
-                    tempRect.width = 1f;
-
+                Rect tempRect = camera.GetComponent<Camera>().rect; // Deplacer le render
+                tempRect.width = 1f;
+ 
                 camera.GetComponent<Camera>().rect = tempRect;
             }
         }
+ 
+        else if (gameManager.playerLoaded == 1)
+        {
+            playerLayer = 7;
+            arrowLayerAdv = 8;
 
-            else if (gameManager.playerLoaded == 1)
+
+
+            chapo.GetComponent<SkinnedMeshRenderer>().material = redMat; // Mettre la couleur du chapo
+            arrow.GetComponent<SkinnedMeshRenderer>().material = redMat; // MEttre la couleur de la fleche
+
+
+            if (numberPlayer == 2)
             {
-                playerLayer = 7;
+                go.name = "Player2";
+                go.tag = "Player2";
+                go.GetComponent<Player>().SetPlayerEnum(Player.PlayerEnum.player2);
 
+                Rect tempRect = camera.GetComponent<Camera>().rect; // Deplacer le render
+                tempRect.x = 0.5f;
 
-                chapo.GetComponent<SkinnedMeshRenderer>().material = redMat; // Mettre la couleur du chapo
-
-                if (numberPlayer == 2)
-                {
-                    go.name = "Player2";
-                    go.tag = "Player2";
-                    go.GetComponent<Player>().SetPlayerEnum(Player.PlayerEnum.player2);
-
-                    Rect tempRect = camera.GetComponent<Camera>().rect; // Deplacer le render
-                    tempRect.x = 0.5f;
-
-                    camera.GetComponent<Camera>().rect = tempRect;
-                }
-                else if (numberPlayer == 1)
-                {
-                    go.name = "AI";
-                    go.tag = "AI";
-                    go.GetComponent<Player>().SetPlayerEnum(Player.PlayerEnum.AI);
-
-                    Destroy(camera.gameObject);
-                }
+                camera.GetComponent<Camera>().rect = tempRect;
             }
-
-
-
-
-            go.layer = playerLayer;
-
-            camera.GetComponent<Camera>().cullingMask &= ~(1 << playerLayer); // Enlever la layer de la camera
-
-            foreach (Transform child in transform) // Mettre la layer
+            else if (numberPlayer == 1)
             {
-                child.gameObject.layer = playerLayer;
-                foreach (Transform child2 in child)
+                go.name = "AI";
+                go.tag = "AI";
+                go.GetComponent<Player>().SetPlayerEnum(Player.PlayerEnum.AI);
+
+                Destroy(camera.gameObject);
+            }
+        }
+
+
+        go.layer = playerLayer;
+
+
+        camera.GetComponent<Camera>().cullingMask &= ~(1 << playerLayer | 1 << arrowLayerAdv); // Enlever la layer de la camera
+
+        foreach (Transform child in transform) // Mettre la layer
+        {
+            child.gameObject.layer = playerLayer;
+            foreach (Transform child2 in child)
+            {
+                if(child2 != arrow)
                 {
                     child2.gameObject.layer = playerLayer;
                 }
+                else
+                {
+                    child2.gameObject.layer = playerLayer + 2;
+                }
+                
             }
-
-
-            gameManager.playerLoaded++;
         }
 
-    } 
+
+
+        gameManager.playerLoaded++;
+    }
+
+} 

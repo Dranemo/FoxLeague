@@ -171,7 +171,7 @@ MonoBehaviour:
   playerNumber: 2
   playerLoaded: 0
   numberObstacles: 10
-  spread: 25
+  spread: 30
   minDistance: 15
   cam1: {fileID: 0}
   cam2: {fileID: 0}

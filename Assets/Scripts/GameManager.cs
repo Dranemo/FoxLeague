@@ -51,12 +51,12 @@ public class GameManager : MonoBehaviour
 
     private static GameManager instance;
 
-    private GameObject ball;
-    private GameObject player;
-    private GameObject player2;
-    private GameObject obstacles;
+    public GameObject ball;
+    public GameObject player;
+    public GameObject player2;
+    public GameObject obstacles;
 
-    private GameObject particle;
+    public GameObject particle;
 
     ScoreCanvaManager scoreCanvaManager;
     [SerializeField] public int score1 = 0;
@@ -165,21 +165,6 @@ public class GameManager : MonoBehaviour
         player2.transform.GetComponent<Rigidbody>().isKinematic = booleen;
     }
 
-    private void ParticleSystem(Goal.PlayerGoal playerGoal)
-    {
-        particle.transform.position = ball.transform.position;
-        
-        if(playerGoal == Goal.PlayerGoal.Player_2)
-        {
-            particle.GetComponent<ParticleSystemRenderer>().material = blueMat;
-        }
-        else
-        {
-            particle.GetComponent<ParticleSystemRenderer>().material = redMat;
-        }
-
-        particle.GetComponent<ParticleSystem>().Play();
-    }
 
     private void CamGoal(Goal.PlayerGoal playerGoal)
     {
@@ -408,7 +393,6 @@ public class GameManager : MonoBehaviour
             scoreCanvaManager.timePause = true;
 
             // Effets
-            ParticleSystem(playerGoal);
             CamGoal(playerGoal);
 
 

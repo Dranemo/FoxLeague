@@ -7,13 +7,23 @@ public class SliderJetpack : MonoBehaviour
     public Slider mainSlider1;
     public Slider mainSlider2;
 
-    public PlayerMovement playerMovement;
-    public PlayerMovement playerMovement2;
+    private PlayerMovement playerMovement;
+    private PlayerMovement playerMovement2;
+
+    private GameManager gameManager;
+
+
+    private void Awake()
+    {
+        gameManager = GameManager.GetInstance();
+    }
 
     void Start()
     {
-        playerMovement = GameObject.FindWithTag("Player").GetComponent<PlayerMovement>();
-        playerMovement2 = GameObject.FindWithTag("Player2").GetComponent<PlayerMovement>();
+        playerMovement = gameManager.player.GetComponent<PlayerMovement>();
+        playerMovement2 = gameManager.player2.GetComponent<PlayerMovement>();
+
+
         mainSlider1 = this.transform.Find("SliderP1").GetComponent<Slider>();
         mainSlider2 = this.transform.Find("SliderP2").GetComponent<Slider>();
 
