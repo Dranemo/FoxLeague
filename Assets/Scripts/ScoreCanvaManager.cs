@@ -32,22 +32,10 @@ public class ScoreCanvaManager : MonoBehaviour
         textScoreP1 = this.transform.Find("ScoreP1").GetComponent<TextMeshProUGUI>();
         textScoreP2 = this.transform.Find("ScoreP2").GetComponent<TextMeshProUGUI>();
 
-        textDebug = transform.Find("Debogage Text").GetComponent<TextMeshProUGUI>();
-        gameManager = GameManager.GetInstance();
-
         textTime = this.transform.Find("Time").GetComponent<TextMeshProUGUI>();
 
         ResetCanva();
     }
-
-    private void Start()
-    {
-        Transform player = gameManager.player2.transform;
-
-        textDebug.text = "position : " + player.Find("PlayerCamera").Find("3D RightArrow").position;
-    }
-
-
 
     public static ScoreCanvaManager GetInstance()
     {

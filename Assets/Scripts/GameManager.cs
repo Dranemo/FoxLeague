@@ -135,7 +135,7 @@ public class GameManager : MonoBehaviour
         canva.transform.Find("BorderTime").GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -170);
 
 
-        allKinetic(false);
+        AllKinematic(false);
         scoreCanvaManager.PauseUnpauseTime(false);
     }
 
@@ -151,7 +151,7 @@ public class GameManager : MonoBehaviour
         ball = FindObjectOfType<Ball>().gameObject;
     }
 
-    public void allKinetic(bool booleen)
+    public void AllKinematic(bool booleen)
     {
         ball.transform.GetComponent<Rigidbody>().isKinematic = booleen;
         player.transform.GetComponent<Rigidbody>().isKinematic = booleen;
@@ -382,7 +382,7 @@ public class GameManager : MonoBehaviour
         {
             ball.GetComponent<Ball>().isGoaled = true;
             //Mettre tout en pause
-            allKinetic(true);
+            AllKinematic(true);
             scoreCanvaManager.timePause = true;
 
             // Effets
@@ -442,6 +442,8 @@ public class GameManager : MonoBehaviour
             else
             {
                 scoreCanvaManager.ResetCanva();
+                AllKinematic(true);
+                ResetPositions();
             }
         }
     }
