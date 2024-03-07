@@ -14,6 +14,10 @@ public class ScoreCanvaManager : MonoBehaviour
     private TextMeshProUGUI textScoreP1;
     private TextMeshProUGUI textScoreP2;
 
+
+    private TextMeshProUGUI textDebug;
+    GameManager gameManager;
+
     private TextMeshProUGUI textTime;
 
     [SerializeField] public float countdownTime = 120; // Temps en secondes
@@ -28,9 +32,19 @@ public class ScoreCanvaManager : MonoBehaviour
         textScoreP1 = this.transform.Find("ScoreP1").GetComponent<TextMeshProUGUI>();
         textScoreP2 = this.transform.Find("ScoreP2").GetComponent<TextMeshProUGUI>();
 
+        textDebug = transform.Find("Debogage Text").GetComponent<TextMeshProUGUI>();
+        gameManager = GameManager.GetInstance();
+
         textTime = this.transform.Find("Time").GetComponent<TextMeshProUGUI>();
 
         ResetCanva();
+    }
+
+    private void Start()
+    {
+        Transform player = gameManager.player2.transform;
+
+        textDebug.text = "position : " + player.Find("PlayerCamera").Find("3D RightArrow").position;
     }
 
 

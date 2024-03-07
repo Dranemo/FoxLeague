@@ -38,7 +38,7 @@ public class Player : MonoBehaviour
 
         Transform chapo = go.transform.Find("animal_people_beanie_wolf_1_onWear_WithAccessoryLogic").Find("animal_people_beanie_wolf_1_onWear_WithAccessoryLogic");
         Transform camera = go.transform.Find("PlayerCamera");
-        Transform arrow = camera.Find("3D RightArrow");
+        GameObject arrow = camera.Find("3D RightArrow").gameObject;
         camera.tag = "MainCamera";
  
         int playerLayer = 0;
@@ -57,7 +57,7 @@ public class Player : MonoBehaviour
             go.tag = "Player";
  
             chapo.GetComponent<SkinnedMeshRenderer>().material = blueMat; // Mettre la couleur du chapo
-            arrow.GetComponent<SkinnedMeshRenderer>().material = blueMat; // MEttre la couleur de la fleche
+            arrow.GetComponent<MeshRenderer>().material = blueMat; // MEttre la couleur de la fleche
 
 
             if (numberPlayer == 1)
@@ -77,7 +77,7 @@ public class Player : MonoBehaviour
 
 
             chapo.GetComponent<SkinnedMeshRenderer>().material = redMat; // Mettre la couleur du chapo
-            arrow.GetComponent<SkinnedMeshRenderer>().material = redMat; // MEttre la couleur de la fleche
+            arrow.GetComponent<MeshRenderer>().material = redMat; // MEttre la couleur de la fleche
 
 
             if (numberPlayer == 2)
@@ -112,7 +112,7 @@ public class Player : MonoBehaviour
             child.gameObject.layer = playerLayer;
             foreach (Transform child2 in child)
             {
-                if(child2 != arrow)
+                if(child2.gameObject != arrow)
                 {
                     child2.gameObject.layer = playerLayer;
                 }

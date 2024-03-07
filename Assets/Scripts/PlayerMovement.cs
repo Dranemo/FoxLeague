@@ -11,6 +11,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float boost = 100.0f;
     [SerializeField] private float flySpeed = 1500f;
     [SerializeField] private int distanceFrappe = 8;
+
     private bool canJump = false;
     bool canBoost = true;
     bool isBoostring = false;
@@ -181,19 +182,23 @@ public class PlayerMovement : MonoBehaviour
 
         if (!paused && pauseInput)
         {
-            gameManager.allKinetic(true);
+            /*gameManager.allKinetic(true);
             scoreCanvaManager.PauseUnpauseTime(true);
+*/
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+            SceneManagerScript.LoadScene("Main_Menu");
 
-            paused = true;
+            /*paused = true;*/
             
         }
-        else if (paused && pauseInput)
+        /*else if (paused && pauseInput)
         {
             gameManager.allKinetic(false);
             scoreCanvaManager.PauseUnpauseTime(false);
 
             paused = false;
-        }
+        }*/
 
         // Savoir si la touche de sprint est relachée
         if (boostInputReleased)
