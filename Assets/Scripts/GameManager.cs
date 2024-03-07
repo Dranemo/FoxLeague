@@ -137,9 +137,9 @@ public class GameManager : MonoBehaviour
 
 
         // Reset éléments sur le canva
-        canva.transform.Find("Minimap").GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -90);
-        canva.transform.Find("Time").GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -185);
-        canva.transform.Find("BorderTime").GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -185);
+        canva.transform.Find("Minimap").GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -75);
+        canva.transform.Find("Time").GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -170);
+        canva.transform.Find("BorderTime").GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -170);
 
 
         allKinetic(false);
@@ -411,8 +411,6 @@ public class GameManager : MonoBehaviour
 
     public void nextManche()
     {
-        Debug.Log("endManche");
-
         if (score1 == score2 && canAddTime)
         {
             scoreCanvaManager.PauseUnpauseTime(true);
