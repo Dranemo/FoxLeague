@@ -69,6 +69,7 @@ public class PlayerMovement : MonoBehaviour
     private void Start()
     {
         ball = gameManager.ball;
+        animator=GetComponent<Animator>();
     }
 
     private void Update()
