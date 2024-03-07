@@ -130,10 +130,10 @@ public class PlayerMovement : MonoBehaviour
         // Frappe
         if (frappeInput)
         {
-            if (Vector3.Distance(transform.position, ball.transform.position) <= distanceFrappe)
+            if (Vector3.Distance(transform.position, ball.transform.position) <= distanceFrappe && boost > 0)
             {
-                ball.GetComponent<Rigidbody>().AddForce((ball.transform.position - transform.position).normalized * 100);
-                boost -= 30;
+                ball.GetComponent<Rigidbody>().AddForce((ball.transform.position - transform.position).normalized * boost * 2);
+                boost = 0;
             }
             else
             {
