@@ -52,6 +52,10 @@ public class GameManager : MonoBehaviour
     public GameObject particle;
 
     ScoreCanvaManager scoreCanvaManager;
+    [SerializeField] public Sprite spriteEmptyCircle;
+    [SerializeField] public Sprite spriteFullCircleRed;
+    [SerializeField] public Sprite spriteFullCircleBlue;
+
     [SerializeField] public int score1 = 0;
     [SerializeField] public int score2 = 0;
 
@@ -131,8 +135,8 @@ public class GameManager : MonoBehaviour
 
         // Reset éléments sur le canva
         canva.transform.Find("Minimap").GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -75);
-        canva.transform.Find("Time").GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -170);
         canva.transform.Find("BorderTime").GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -170);
+        canva.transform.Find("ManchesCircle").GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -210);
 
 
         allKinetic(false);
@@ -176,8 +180,8 @@ public class GameManager : MonoBehaviour
         cameraBallGoal.GetComponent<Camera>().rect = tempRect;
 
         canva.transform.Find("Minimap").GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 200);
-        canva.transform.Find("Time").GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -20);
         canva.transform.Find("BorderTime").GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -20);
+        canva.transform.Find("ManchesCircle").GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -60);
     }
 
     private void GenerateTerrain()
@@ -419,10 +423,12 @@ public class GameManager : MonoBehaviour
 
             if (score1 > score2)
             {
+                scoreCanvaManager.AddMancheWin(Player.PlayerEnum.player1, WinP1);
                 WinP1++;
             }
             else if (score1 < score2)
             {
+                scoreCanvaManager.AddMancheWin(Player.PlayerEnum.player2, WinP2);
                 WinP2++;
             }
 

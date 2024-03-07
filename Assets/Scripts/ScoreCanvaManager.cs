@@ -6,6 +6,7 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using System.CodeDom.Compiler;
 using UnityEditor;
+using System.Collections.Generic;
 
 public class ScoreCanvaManager : MonoBehaviour
 {
@@ -15,6 +16,8 @@ public class ScoreCanvaManager : MonoBehaviour
     private TextMeshProUGUI textScoreP2;
 
     private GameManager gameManager;
+
+    private List<GameObject> manchesCircles;
 
 
 
@@ -35,6 +38,11 @@ public class ScoreCanvaManager : MonoBehaviour
         textScoreP2 = this.transform.Find("BorderScore2").Find("ScoreP2").GetComponent<TextMeshProUGUI>();
 
         textTime = this.transform.Find("BorderTime").Find("Time").GetComponent<TextMeshProUGUI>();
+
+        manchesCircles = new List<GameObject>();
+        manchesCircles.Add(transform.Find("ManchesCircle").Find("Circle1").gameObject);
+        manchesCircles.Add(transform.Find("ManchesCircle").Find("Circle2").gameObject);
+        manchesCircles.Add(transform.Find("ManchesCircle").Find("Circle3").gameObject);
 
         ResetCanva();
     }
@@ -115,5 +123,32 @@ public class ScoreCanvaManager : MonoBehaviour
     public void PauseUnpauseTime(bool pause)
     {
         timePause = pause;
+    }
+
+    public void AddMancheWin(Player.PlayerEnum player, int WinPlayer)
+    {
+        switch (player)
+        {
+            case Player.PlayerEnum.player1:
+                if(WinPlayer == 0)
+                {
+                    manchesCircles[0].GetComponent<Image>().sprite = gameManager.spriteFullCircleBlue;
+                }
+                else
+                {
+                    manchesCircles[1].GetComponent<Image>().sprite = gameManager.spriteFullCircleBlue;
+                }
+                break;
+            case Player.PlayerEnum.player2:
+                if (WinPlayer == 0)
+                {
+                    manchesCircles[2].GetComponent<Image>().sprite = gameManager.spriteFullCircleRed;
+                }
+                else
+                {
+                    manchesCircles[1].GetComponent<Image>().sprite = gameManager.spriteFullCircleRed;
+                }
+                break;
+        }
     }
 }

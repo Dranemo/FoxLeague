@@ -5340,6 +5340,16 @@ MonoBehaviour:
   minDistance: 15
   cam1: {fileID: 0}
   cam2: {fileID: 0}
+  ball: {fileID: 0}
+  player: {fileID: 0}
+  player2: {fileID: 0}
+  obstacles: {fileID: 0}
+  particle: {fileID: 0}
+  spriteEmptyCircle: {fileID: 21300000, guid: c5c745dd0f44eec4ab94750545a576cc, type: 3}
+  spriteFullCircleRed: {fileID: 21300000, guid: ce4c9bbde16d8354fa039056b5a8e144,
+    type: 3}
+  spriteFullCircleBlue: {fileID: 21300000, guid: 9038b5e90619af74a9cc2174b0d2d7e8,
+    type: 3}
   score1: 0
   score2: 0
   WinP1: 0
