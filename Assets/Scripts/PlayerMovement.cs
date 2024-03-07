@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Android;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -23,6 +24,7 @@ public class PlayerMovement : MonoBehaviour
     bool pauseInput = false;
     bool boostInputReleased = true;
 
+    bool paused = false;
 
     private Rigidbody rb;
     private GameObject ball;
@@ -177,15 +179,20 @@ public class PlayerMovement : MonoBehaviour
 
         //Pause
 
-        if (pauseInput)
+        if (!paused && pauseInput)
         {
             gameManager.allKinetic(true);
             scoreCanvaManager.PauseUnpauseTime(true);
+
+            paused = true;
+            
         }
-        else
+        else if (paused && pauseInput)
         {
             gameManager.allKinetic(false);
             scoreCanvaManager.PauseUnpauseTime(false);
+
+            paused = false;
         }
 
         // Savoir si la touche de sprint est relachée
