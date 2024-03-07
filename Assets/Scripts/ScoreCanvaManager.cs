@@ -33,7 +33,7 @@ public class ScoreCanvaManager : MonoBehaviour
         textScoreP2 = this.transform.Find("ScoreP2").GetComponent<TextMeshProUGUI>();
 
         textTime = this.transform.Find("Time").GetComponent<TextMeshProUGUI>();
-
+        gameManager = GameManager.GetInstance();
         ResetCanva();
     }
 
@@ -95,9 +95,16 @@ public class ScoreCanvaManager : MonoBehaviour
     {
         if (!timePause)
         {
-            currentTime -= Time.deltaTime;
+            if (gameManager.equality)
+            {
+                currentTime += Time.deltaTime;
+            }
+            else
+            {
+                currentTime -= Time.deltaTime;
+            }
 
-            if(currentTime <= 0)
+            if (currentTime <= 0)
             {
                 GameManager.GetInstance().nextManche();
             }

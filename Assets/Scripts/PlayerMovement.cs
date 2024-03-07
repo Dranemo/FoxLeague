@@ -182,7 +182,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (!paused && pauseInput)
         {
-            /*gameManager.AllKinematic(true);
+            /*gameManager.allKinetic(true);
             scoreCanvaManager.PauseUnpauseTime(true);
 */
             Cursor.lockState = CursorLockMode.None;
@@ -194,7 +194,7 @@ public class PlayerMovement : MonoBehaviour
         }
         /*else if (paused && pauseInput)
         {
-            gameManager.AllKinematic(false);
+            gameManager.allKinetic(false);
             scoreCanvaManager.PauseUnpauseTime(false);
 
             paused = false;

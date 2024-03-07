@@ -59,6 +59,7 @@ public class GameManager : MonoBehaviour
     public int WinP2 = 0;
 
     private bool canAddTime = true;
+    public bool equality = false;
 
     void Awake()
     {
@@ -135,7 +136,7 @@ public class GameManager : MonoBehaviour
         canva.transform.Find("BorderTime").GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -170);
 
 
-        AllKinematic(false);
+        allKinetic(false);
         scoreCanvaManager.PauseUnpauseTime(false);
     }
 
@@ -151,7 +152,7 @@ public class GameManager : MonoBehaviour
         ball = FindObjectOfType<Ball>().gameObject;
     }
 
-    public void AllKinematic(bool booleen)
+    public void allKinetic(bool booleen)
     {
         ball.transform.GetComponent<Rigidbody>().isKinematic = booleen;
         player.transform.GetComponent<Rigidbody>().isKinematic = booleen;
@@ -372,7 +373,20 @@ public class GameManager : MonoBehaviour
             default:
                 break;
         }
-
+        if (equality)
+        {
+            switch (playerGoal)
+            {
+                case Goal.PlayerGoal.Player_2:
+                    score1++;
+                    WinP1++;
+                    break;
+                case Goal.PlayerGoal.Player_1:
+                    score2++;
+                    WinP2++;
+                    break;
+            }
+            }
         scoreCanvaManager.WriteCanvaScore(score1, score2);
     }
 
@@ -382,7 +396,7 @@ public class GameManager : MonoBehaviour
         {
             ball.GetComponent<Ball>().isGoaled = true;
             //Mettre tout en pause
-            AllKinematic(true);
+            allKinetic(true);
             scoreCanvaManager.timePause = true;
 
             // Effets
@@ -404,13 +418,14 @@ public class GameManager : MonoBehaviour
 
     public void nextManche()
     {
-        if (score1 == score2 && canAddTime)
+        equality = false;
+        if (score1 == score2)
         {
             scoreCanvaManager.PauseUnpauseTime(true);
 
             StartCoroutine(GoalDone(Goal.PlayerGoal.endManche));
-
-            scoreCanvaManager.currentTime = 60;
+            equality = true;
+            scoreCanvaManager.currentTime = 0;
 
             canAddTime = false;
         }
@@ -442,7 +457,7 @@ public class GameManager : MonoBehaviour
             else
             {
                 scoreCanvaManager.ResetCanva();
-                AllKinematic(true);
+                allKinetic(true);
                 ResetPositions();
             }
         }
