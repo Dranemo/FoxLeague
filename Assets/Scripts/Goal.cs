@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class Goal : MonoBehaviour
 {
-    public enum PlayerGoal { Player_1,Player_2 }
+    public enum PlayerGoal { Player_1,Player_2, endManche }
     [SerializeField] private PlayerGoal playerGoal;
 
     Material redMat;

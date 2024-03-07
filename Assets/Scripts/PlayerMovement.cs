@@ -69,12 +69,13 @@ public class PlayerMovement : MonoBehaviour
     private void Start()
     {
         ball = gameManager.ball;
+        animator = GetComponent<Animator>();
     }
 
     private void Update()
     {
         float speedAnim = rb.velocity.magnitude;
-        this.GetComponent<Animator>().SetFloat("MoveSpeed", speedAnim);
+        animator.SetFloat("MoveSpeed", speedAnim);
 
 
         // Get input

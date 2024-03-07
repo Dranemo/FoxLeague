@@ -411,18 +411,21 @@ public class GameManager : MonoBehaviour
 
     public void nextManche()
     {
-        if(score1 == score2 && canAddTime)
+        Debug.Log("endManche");
+
+        if (score1 == score2 && canAddTime)
         {
             scoreCanvaManager.PauseUnpauseTime(true);
 
-            StartCoroutine(GoalDone(0));
+            StartCoroutine(GoalDone(Goal.PlayerGoal.endManche));
 
-            scoreCanvaManager.currentTime = 120;
+            scoreCanvaManager.currentTime = 60;
 
             canAddTime = false;
         }
         else
         {
+
             if (score1 > score2)
             {
                 WinP1++;
@@ -442,9 +445,7 @@ public class GameManager : MonoBehaviour
 
             if (WinP1 >= 2 || WinP2 >= 2)
             {
-                Cursor.lockState = CursorLockMode.None;
-                Cursor.visible = true;
-                SceneManager.LoadScene("Victory_Screen");
+                EndGame();
             }
 
             else
@@ -456,6 +457,8 @@ public class GameManager : MonoBehaviour
 
     public void EndGame()
     {
-
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+        SceneManager.LoadScene("Victory_Screen");
     }
 }
