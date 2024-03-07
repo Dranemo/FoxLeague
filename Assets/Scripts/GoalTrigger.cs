@@ -20,10 +20,11 @@ public class GoalTrigger : MonoBehaviour
     {
 
         PlayerGoal goal = transform.parent.GetComponent<Goal>().GetGoal();
-        audioSource.Play();
+        
 
         if (other.CompareTag("Ball"))
         {
+            audioSource.Play();
             if (goal == PlayerGoal.Player_2) 
             {
                 StartCoroutine(GameManager.GetInstance().GoalDone(goal));

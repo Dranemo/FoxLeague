@@ -54,6 +54,7 @@ public class PlayerMovement : MonoBehaviour
     private float cameraDistortionNormal = 60f;
     private float cameraDistortionActual = 60f;
     private bool speedChangedBool = false;
+    private Animator animator;
 
 
 
@@ -65,6 +66,7 @@ public class PlayerMovement : MonoBehaviour
     private void Start()
     {
         ball = FindObjectOfType<Ball>().gameObject;
+        animator=this.GetComponent<Animator>();
     }
 
 
@@ -109,6 +111,8 @@ public class PlayerMovement : MonoBehaviour
         {
             jumpVector = Vector3.up * jumpSpeed;
             canJump = false;
+            animator.SetBool("Jump", true);
+            animator.Play("Jump");
         }
         else if (!canJump && jumpInput && boost > 0)
         {
@@ -175,10 +179,12 @@ public class PlayerMovement : MonoBehaviour
 
         // Collision avec un objet en dessous
         RaycastHit hit;
-        if (Physics.Raycast(transform.position + (Vector3.up * 0.1f), Vector3.down, out hit, 1f))
+        if (Physics.Raycast(transform.position + (Vector3.up * 0.1f), Vector3.down, out hit, 0.2f))
         {
             if ((hit.collider.CompareTag("Floor") || hit.collider.CompareTag("Obstacle")) && !speedChangedBool)
             {
+                animator.SetBool("Grounded", true);
+                animator.Play("Movement");
                 // Refill the jetpack fuel
                 RefillBoost();
                 if (!canJump)
@@ -186,10 +192,13 @@ public class PlayerMovement : MonoBehaviour
                     canJump = true;
                 }
                 GetComponent<Rigidbody>().drag = 1.5f;
-                this.GetComponent<Animator>().SetBool("Jump", false);
+                animator.SetBool("Jump", false);
             }
         }
-
+        else
+        {
+            animator.SetBool("Grounded", false);
+        }
 
 
 
