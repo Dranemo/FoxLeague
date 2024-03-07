@@ -16,7 +16,7 @@ public class ScoreCanvaManager : MonoBehaviour
 
     private TextMeshProUGUI textTime;
 
-    [SerializeField] public float countdownTime = 360; // Temps en secondes
+    [SerializeField] public float countdownTime = 120; // Temps en secondes
     public float currentTime;
 
     public bool timePause = false;
@@ -49,7 +49,7 @@ public class ScoreCanvaManager : MonoBehaviour
 
     public void ResetCanva()
     {
-        PauseUnpauseTime(true);
+        PauseUnpauseTime(false);
         WriteCanvaScore(0, 0);
         currentTime = countdownTime;
     }
