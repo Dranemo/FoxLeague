@@ -14,8 +14,9 @@ public class ScoreCanvaManager : MonoBehaviour
     private TextMeshProUGUI textScoreP1;
     private TextMeshProUGUI textScoreP2;
 
+    private TextMeshProUGUI textCenter;
 
-    private TextMeshProUGUI textDebug;
+
     GameManager gameManager;
 
     private TextMeshProUGUI textTime;
@@ -23,7 +24,7 @@ public class ScoreCanvaManager : MonoBehaviour
     [SerializeField] public float countdownTime = 120; // Temps en secondes
     public float currentTime;
 
-    public bool timePause = false;
+    private bool timePause = false;
 
 
 
@@ -33,7 +34,12 @@ public class ScoreCanvaManager : MonoBehaviour
         textScoreP2 = this.transform.Find("ScoreP2").GetComponent<TextMeshProUGUI>();
 
         textTime = this.transform.Find("Time").GetComponent<TextMeshProUGUI>();
+
+        textCenter = transform.Find("BigTextCenter").GetComponent<TextMeshProUGUI>();
+
         gameManager = GameManager.GetInstance();
+
+        currentTime = countdownTime;
         ResetCanva();
     }
 
@@ -51,8 +57,9 @@ public class ScoreCanvaManager : MonoBehaviour
 
     public void ResetCanva()
     {
-        PauseUnpauseTime(false);
         WriteCanvaScore(0, 0);
+        WriteCanvaTime(currentTime);
+        textCenter.text = "";
         currentTime = countdownTime;
     }
 
@@ -106,7 +113,7 @@ public class ScoreCanvaManager : MonoBehaviour
 
             if (currentTime <= 0)
             {
-                GameManager.GetInstance().nextManche();
+                GameManager.GetInstance().NextManche();
             }
             else
             {
@@ -118,5 +125,43 @@ public class ScoreCanvaManager : MonoBehaviour
     public void PauseUnpauseTime(bool pause)
     {
         timePause = pause;
+    }
+
+    public void WriteCanvaNextManche(Player.PlayerEnum playerEnum)
+    {
+        string text = "";
+
+        switch (playerEnum)
+        {
+            case Player.PlayerEnum.player1:
+                text += "Joueur 1";
+                break;
+            case Player.PlayerEnum.player2:
+                text += "Joueur 2";
+                break;
+            case Player.PlayerEnum.AI:
+                text += "AI";
+                break;
+        }
+
+        text += " a gagné la manche !";
+        textCenter.text = text;
+    }
+
+    public IEnumerator WriteStartCanva()
+    {
+        WriteCanvaTime(currentTime);
+
+        for (int i = 3; i > 0; i--)
+        {
+            textCenter.text = i.ToString();
+            yield return new WaitForSeconds(1);
+        }
+
+        textCenter.text = "";
+
+
+        gameManager.AllKinematic(false);
+        PauseUnpauseTime(false);
     }
 }
