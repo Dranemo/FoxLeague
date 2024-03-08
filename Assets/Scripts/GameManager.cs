@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting.ReorderableList;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -61,8 +62,7 @@ public class GameManager : MonoBehaviour
 
     public int WinP1 = 0;
     public int WinP2 = 0;
-
-    private bool canAddTime = true;
+    public bool equality = false;
 
     void Awake()
     {
@@ -102,6 +102,10 @@ public class GameManager : MonoBehaviour
 
         canva = FindObjectOfType<Canvas>().gameObject;
 
+
+        scoreCanvaManager.PauseUnpauseTime(true);
+        AllKinematic(true);
+
         ResetPositions();
     }
 
@@ -138,9 +142,7 @@ public class GameManager : MonoBehaviour
         canva.transform.Find("BorderTime").GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -170);
         canva.transform.Find("ManchesCircle").GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -210);
 
-
-        allKinetic(false);
-        scoreCanvaManager.PauseUnpauseTime(false);
+        StartCoroutine(scoreCanvaManager.WriteStartCanva());
     }
 
     private void FindItems()
@@ -155,7 +157,7 @@ public class GameManager : MonoBehaviour
         ball = FindObjectOfType<Ball>().gameObject;
     }
 
-    public void allKinetic(bool booleen)
+    public void AllKinematic(bool booleen)
     {
         ball.transform.GetComponent<Rigidbody>().isKinematic = booleen;
         player.transform.GetComponent<Rigidbody>().isKinematic = booleen;
@@ -245,120 +247,157 @@ public class GameManager : MonoBehaviour
             ballGen.name = "Ball";
         }
 
-        void GenerateRandomObstacle()
-        {
-            List<Vector3> position = new();
-            List<GameObject> obstaclesList = new();
+    }
 
+
+    void GenerateRandomObstacle(bool replaceObstacles = false)
+    {
+        List<Vector3> position = new();
+        List<GameObject> obstaclesList = new();
+
+        List<GameObject> obstacleListAlrThere = new();
+
+        if (!replaceObstacles)
+        {
             GameObject obstacles_ = new GameObject("Obstacles");
             obstacles = obstacles_;
+        }
+        else
+        {
+            foreach(Transform obstacle in obstacles.transform)
+            {
+                obstacleListAlrThere.Add(obstacle.gameObject);
+            }
+        }
 
-            obstaclesList.Add(ballPos.gameObject);
-            obstaclesList.Add(player2Pos.gameObject);
-            obstaclesList.Add(playerPos.gameObject);
-            obstaclesList.Add(goal1Pos.gameObject);
-            obstaclesList.Add(goal2Pos.gameObject);
+        obstaclesList.Add(ballPos.gameObject);
+        obstaclesList.Add(player2Pos.gameObject);
+        obstaclesList.Add(playerPos.gameObject);
+        obstaclesList.Add(goal1Pos.gameObject);
+        obstaclesList.Add(goal2Pos.gameObject);
 
+        GameObject item = null;
+        int itemMovedIndex = 0;
 
-
-            Vector3 positionInitiale = new Vector3(-20, 0, -40);
-            GameObject item = CreateNewItem(position.Count, positionInitiale);
+        Vector3 positionInitiale = new Vector3(-20, 0, -40);
+        if (!replaceObstacles)
+        {
+            item = CreateNewItem(position.Count, positionInitiale);
             item.transform.parent = obstacles.transform;
-            obstaclesList.Add(item);
-            position.Add(positionInitiale);
-
 
             numberObstacles = Random.Range(30, 50);
-            Debug.Log(numberObstacles);
+        }
+        else
+        {
+            itemMovedIndex = Random.Range(0, obstacleListAlrThere.Count);
 
-            int safeCount = 0;
-            while (position.Count > 0 && safeCount++ < numberObstacles)
+            item = obstacleListAlrThere[itemMovedIndex];
+            obstacleListAlrThere.RemoveAt(itemMovedIndex);
+            item.transform.position = positionInitiale;
+        }
+        obstaclesList.Add(item);
+        position.Add(positionInitiale);
+
+
+
+        int safeCount = 0;
+        while (position.Count > 0 && safeCount++ < numberObstacles)
+        {
+
+            int selectedIndex = Random.Range(0, position.Count);
+            Vector3 point = position[selectedIndex];
+
+            int tries = 400;
+            while (tries-- > 0)
             {
 
-                int selectedIndex = Random.Range(0, position.Count);
-                Vector3 point = position[selectedIndex];
+                Vector3 newPos = point + GetRandomPoint();
 
-                int tries = 400;
-                while (tries-- > 0)
+                bool valid = true;
+                if (newPos.x > 20 || newPos.x < -20 || newPos.z > 40 || newPos.z < -40)
                 {
+                    valid = false;
+                }
 
-                    Vector3 newPos = point + GetRandomPoint();
-
-                    bool valid = true;
-                    if(newPos.x >  20 || newPos.x < -20 || newPos.z > 40 || newPos.z < -40)
+                for (int i = 0; i < position.Count && valid; i++)
+                {
+                    if (Vector3.Distance(newPos, new Vector3(obstaclesList[i].transform.position.x, 0, obstaclesList[i].transform.position.z)) < minDistance)
                     {
                         valid = false;
-                    }
-
-                    for (int i = 0; i < position.Count && valid; i++)
-                    {
-                        if (Vector3.Distance(newPos, new Vector3(obstaclesList[i].transform.position.x, 0, obstaclesList[i].transform.position.z)) < minDistance)
-                        {
-                            valid = false;
-                            break;
-                        }
-                    }
-
-                    if (valid)
-                    {
-                        item = CreateNewItem(position.Count, newPos);
-
-                        item.transform.parent = obstacles.transform;
-                        obstaclesList.Add(item);
-                        position.Add(newPos);
                         break;
                     }
                 }
 
-            }
-
-
-
-            Vector3 GetRandomPoint()
-            {
-                Vector2 randomPoint = Random.insideUnitCircle;
-                return new Vector3(randomPoint.x, 0, randomPoint.y) * spread;
-            }
-
-            GameObject GetPrefab()
-            {
-                int prefabGenerated = Random.Range(0, 5); // Quel prefab ?
-
-                switch (prefabGenerated)
+                if (valid)
                 {
-                    case 0: // Birch tree
-                        return birchTree;
-                    case 1: // Oak tree
-                        return oakTree;
-                    case 2: // Rock01
-                        return rock01;
-                    case 3: // Rock02
-                        return rock02;
-                    case 4: // Rock03
-                        return rock03;
-                    default:
-                        return null;
+                    if (!replaceObstacles)
+                    {
+
+                        item = CreateNewItem(position.Count, newPos);
+
+                        item.transform.parent = obstacles.transform;
+                    }
+                    else
+                    {
+                        itemMovedIndex = Random.Range(0, obstacleListAlrThere.Count);
+
+                        item = obstacleListAlrThere[itemMovedIndex];
+                        obstacleListAlrThere.RemoveAt(itemMovedIndex);
+                        item.transform.position = newPos;
+                    }
+                    obstaclesList.Add(item);
+                    position.Add(newPos);
+                    break;
                 }
             }
 
-            GameObject CreateNewItem(int i, Vector3 newPos)
+        }
+
+
+
+        Vector3 GetRandomPoint()
+        {
+            Vector2 randomPoint = Random.insideUnitCircle;
+            return new Vector3(randomPoint.x, 0, randomPoint.y) * spread;
+        }
+
+        GameObject GetPrefab()
+        {
+            int prefabGenerated = Random.Range(0, 5); // Quel prefab ?
+
+            switch (prefabGenerated)
             {
-                GameObject itemCreated = null;
-
-                itemCreated = Instantiate(GetPrefab(), newPos, Quaternion.Euler(0, Random.Range(0, 360), 0));
-                itemCreated.tag = "Obstacle";
-                itemCreated.name = "item" + i;
-
-                return itemCreated;
+                case 0: // Birch tree
+                    return birchTree;
+                case 1: // Oak tree
+                    return oakTree;
+                case 2: // Rock01
+                    return rock01;
+                case 3: // Rock02
+                    return rock02;
+                case 4: // Rock03
+                    return rock03;
+                default:
+                    return null;
             }
+        }
+
+        GameObject CreateNewItem(int i, Vector3 newPos)
+        {
+            GameObject itemCreated = null;
+
+            itemCreated = Instantiate(GetPrefab(), newPos, Quaternion.Euler(0, Random.Range(0, 360), 0));
+            itemCreated.tag = "Obstacle";
+            itemCreated.name = "item" + i;
+
+            return itemCreated;
         }
     }
 
-    
 
     public void ReplaceRandomObstacle()
     {
-
+        GenerateRandomObstacle(true);
     }
 
 
@@ -376,7 +415,7 @@ public class GameManager : MonoBehaviour
             default:
                 break;
         }
-
+        
         scoreCanvaManager.WriteCanvaScore(score1, score2);
     }
 
@@ -384,10 +423,12 @@ public class GameManager : MonoBehaviour
     {
         if (!ball.GetComponent<Ball>().isGoaled)
         {
+
+            scoreCanvaManager.PauseUnpauseTime(true);
+            AllKinematic(true);
+
+
             ball.GetComponent<Ball>().isGoaled = true;
-            //Mettre tout en pause
-            allKinetic(true);
-            scoreCanvaManager.timePause = true;
 
             // Effets
             CamGoal(playerGoal);
@@ -402,53 +443,72 @@ public class GameManager : MonoBehaviour
                 yield return new WaitForSeconds(.05f);
             }
 
-            ResetPositions();
+
+            if (equality)
+            {
+                NextManche();
+            }
+            else
+            {
+                ResetPositions();
+            }
+
+            if (playerGoal == Goal.PlayerGoal.endManche)
+            {
+                equality = true;
+            }
         }
     }
 
-    public void nextManche()
+    public void NextManche()
     {
-        if (score1 == score2 && canAddTime)
+
+        AllKinematic(true);
+
+        if (score1 == score2)
         {
-            scoreCanvaManager.PauseUnpauseTime(true);
-
             StartCoroutine(GoalDone(Goal.PlayerGoal.endManche));
-
-            scoreCanvaManager.currentTime = 60;
-
-            canAddTime = false;
+            scoreCanvaManager.currentTime = 0;
         }
         else
         {
+            StartCoroutine(NextMancheCoroutine());
+        }
+    }
 
-            if (score1 > score2)
-            {
-                scoreCanvaManager.AddMancheWin(Player.PlayerEnum.player1, WinP1);
-                WinP1++;
-            }
-            else if (score1 < score2)
-            {
-                scoreCanvaManager.AddMancheWin(Player.PlayerEnum.player2, WinP2);
-                WinP2++;
-            }
+    private IEnumerator NextMancheCoroutine()
+    {
+        if (score1 > score2)
+        {
+            WinP1++;
+            scoreCanvaManager.AddMancheWin(Player.PlayerEnum.player1, WinP1);
+            scoreCanvaManager.WriteCanvaNextManche(Player.PlayerEnum.player1);
+        }
+        else if (score1 < score2)
+        {
+            WinP2++;
+            scoreCanvaManager.AddMancheWin(Player.PlayerEnum.player2, WinP2);
+            scoreCanvaManager.WriteCanvaNextManche(Player.PlayerEnum.player2);
+        }
 
 
-            score1 = 0;
-            score2 = 0;
+        score1 = 0;
+        score2 = 0;
 
-            
+        yield return new WaitForSeconds(3);
 
 
+        if (WinP1 >= 2 || WinP2 >= 2)
+        {
+            EndGame();
+        }
 
-            if (WinP1 >= 2 || WinP2 >= 2)
-            {
-                EndGame();
-            }
-
-            else
-            {
-                scoreCanvaManager.ResetCanva();
-            }
+        else
+        {
+            ReplaceRandomObstacle();
+            equality = false;
+            scoreCanvaManager.ResetCanva();
+            ResetPositions();
         }
     }
 
