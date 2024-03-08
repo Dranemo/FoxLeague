@@ -159,24 +159,31 @@ public class ScoreCanvaManager : MonoBehaviour
         }
     }
 
-    public void WriteCanvaNextManche(Player.PlayerEnum playerEnum)
+    public void WriteCanvaNextManche(Player.PlayerEnum playerEnum, bool overtime = false)
     {
         string text = "";
-
-        switch (playerEnum)
+        if (!overtime)
         {
-            case Player.PlayerEnum.player1:
-                text += "Joueur 1";
-                break;
-            case Player.PlayerEnum.player2:
-                text += "Joueur 2";
-                break;
-            case Player.PlayerEnum.AI:
-                text += "AI";
-                break;
+            switch (playerEnum)
+            {
+                case Player.PlayerEnum.player1:
+                    text += "Joueur 1";
+                    break;
+                case Player.PlayerEnum.player2:
+                    text += "Joueur 2";
+                    break;
+                case Player.PlayerEnum.AI:
+                    text += "AI";
+                    break;
+            }
+
+            text += " a gagné la manche !";
+        }
+        else
+        {
+            text = "Overtime";
         }
 
-        text += " a gagné la manche !";
         textCenter.text = text;
     }
 

@@ -452,13 +452,17 @@ public class GameManager : MonoBehaviour
             }
             else
             {
-                ResetPositions();
+                if (playerGoal == Goal.PlayerGoal.endManche)
+                {
+                    StartCoroutine(OverTime());
+                }
+                else
+                {
+                    ResetPositions();
+                }
             }
 
-            if (playerGoal == Goal.PlayerGoal.endManche)
-            {
-                equality = true;
-            }
+            
         }
     }
 
@@ -515,6 +519,16 @@ public class GameManager : MonoBehaviour
             scoreCanvaManager.ResetCanva();
             ResetPositions();
         }
+    }
+
+    private IEnumerator OverTime()
+    {
+        equality = true;
+        scoreCanvaManager.WriteCanvaNextManche(Player.PlayerEnum.player1, true);
+
+        yield return new WaitForSeconds(3);
+
+        ResetPositions();
     }
 
     public void EndGame()
