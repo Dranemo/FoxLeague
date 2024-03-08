@@ -5336,8 +5336,8 @@ MonoBehaviour:
   playerNumber: 2
   playerLoaded: 0
   numberObstacles: 10
-  spread: 25
-  minDistance: 15
+  spread: 17
+  minDistance: 13
   cam1: {fileID: 0}
   cam2: {fileID: 0}
   ball: {fileID: 0}
@@ -5354,6 +5354,7 @@ MonoBehaviour:
   score2: 0
   WinP1: 0
   WinP2: 0
+  equality: 0
 --- !u!4 &2060071076
 Transform:
   m_ObjectHideFlags: 0
