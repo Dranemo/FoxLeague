@@ -269,6 +269,11 @@ public class GameManager : MonoBehaviour
         GameObject item = null;
         int itemMovedIndex = 0;
 
+        foreach (GameObject positionStart in obstaclesList)
+        {
+            position.Add(new Vector3(positionStart.transform.position.x, 0, positionStart.transform.position.z));
+        }
+
         Vector3 positionInitiale = new Vector3(-20, 0, -40);
         if (!replaceObstacles)
         {
@@ -380,7 +385,7 @@ public class GameManager : MonoBehaviour
 
             itemCreated = Instantiate(GetPrefab(), newPos, Quaternion.Euler(0, Random.Range(0, 360), 0));
             itemCreated.tag = "Obstacle";
-            itemCreated.name = "item" + i;
+            itemCreated.name = "item" + (i - 5);
 
             return itemCreated;
         }
