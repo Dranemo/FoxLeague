@@ -227,16 +227,7 @@ public class GameManager : MonoBehaviour
             goalGen.GetComponent<Goal>().SetGoal(Goal.PlayerGoal.Player_2);
         }
 
-        void GeneratePlayer()
-        {
-            GameObject playerGen = null;
-
-            // Joueur 1
-            playerGen = Instantiate(playerPrefab, Vector3.zero, Quaternion.identity);
-
-            // Joueur 2
-            playerGen = Instantiate(playerPrefab, Vector3.zero, Quaternion.identity);
-        }
+        
 
         void GenerateBall()
         {
@@ -394,7 +385,17 @@ public class GameManager : MonoBehaviour
             return itemCreated;
         }
     }
+    public void GeneratePlayer()
+    {
+        GameObject playerGen = null;
+        playerLoaded = 0;
 
+        // Joueur 1
+        playerGen = Instantiate(playerPrefab, Vector3.zero, Quaternion.identity);
+
+        // Joueur 2
+        playerGen = Instantiate(playerPrefab, Vector3.zero, Quaternion.identity);
+    }
 
     public void ReplaceRandomObstacle()
     {
@@ -465,6 +466,7 @@ public class GameManager : MonoBehaviour
     {
 
         AllKinematic(true);
+        scoreCanvaManager.PauseUnpauseTime(true);
 
         if (score1 == score2)
         {
@@ -506,6 +508,8 @@ public class GameManager : MonoBehaviour
 
         else
         {
+            Debug.Log("??");
+
             ReplaceRandomObstacle();
             equality = false;
             scoreCanvaManager.ResetCanva();
