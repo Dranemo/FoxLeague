@@ -7,8 +7,7 @@ public class VolumeController : MonoBehaviour
 
     void Start()
     {
-        if (volumeSlider == null)
-            volumeSlider = GetComponent<Slider>();
+        volumeSlider = GetComponent<Slider>();
         volumeSlider.value = AudioListener.volume;
         volumeSlider.onValueChanged.AddListener(ChangeVolume);
     }

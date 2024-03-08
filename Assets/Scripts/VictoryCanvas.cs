@@ -1,11 +1,5 @@
-using System;
-using System.Collections;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.SceneManagement;
-using System.CodeDom.Compiler;
-using UnityEditor;
 
 public class WinTag : MonoBehaviour
 {

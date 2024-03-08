@@ -1,8 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
-using static Goal;
 
 public class GoalTrigger : MonoBehaviour
 {
@@ -42,18 +38,18 @@ public class GoalTrigger : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
 
-        PlayerGoal goal = transform.parent.GetComponent<Goal>().GetGoal();
+        Goal.PlayerGoal goal = transform.parent.GetComponent<Goal>().GetGoal();
 
         if (other.gameObject == ball)
         {
             audioSource.Play();
 
-            if (goal == PlayerGoal.Player_2) 
+            if (goal == Goal.PlayerGoal.Player_2) 
             {
                 ParticleSystem(goal);
                 StartCoroutine(GameManager.GetInstance().GoalDone(goal));
             }
-            else if (goal == PlayerGoal.Player_1)
+            else if (goal == Goal.PlayerGoal.Player_1)
             {
                 ParticleSystem(goal);
                 StartCoroutine(GameManager.GetInstance().GoalDone(goal));

@@ -1,5 +1,4 @@
 using UnityEngine;
-using System.Collections;
 using UnityEngine.UI; // Required when Using UI elements.
 
 public class SliderJetpack : MonoBehaviour
