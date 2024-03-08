@@ -140,7 +140,7 @@ public class ScoreCanvaManager : MonoBehaviour
         switch (player)
         {
             case Player.PlayerEnum.player1:
-                if(WinPlayer == 0)
+                if(WinPlayer == 1)
                 {
                     manchesCircles[0].GetComponent<Image>().sprite = gameManager.spriteFullCircleBlue;
                 }
@@ -150,7 +150,7 @@ public class ScoreCanvaManager : MonoBehaviour
                 }
                 break;
             case Player.PlayerEnum.player2:
-                if (WinPlayer == 0)
+                if (WinPlayer == 1)
                 {
                     manchesCircles[2].GetComponent<Image>().sprite = gameManager.spriteFullCircleRed;
                 }

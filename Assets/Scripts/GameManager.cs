@@ -288,7 +288,9 @@ public class GameManager : MonoBehaviour
             numberObstacles = Random.Range(30, 50);
         }
         else
+
         {
+            numberObstacles = obstacleListAlrThere.Count;
             itemMovedIndex = Random.Range(0, obstacleListAlrThere.Count);
 
             item = obstacleListAlrThere[itemMovedIndex];
