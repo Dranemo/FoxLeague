@@ -35,11 +35,11 @@ public class Goal : MonoBehaviour
 
         if(playerGoal == PlayerGoal.Player_2)
         {
-            barres.GetComponent<SkinnedMeshRenderer>().material = redMat;
+            barres.GetComponent<MeshRenderer>().material = redMat;
         }
         else
         {
-            barres.GetComponent<SkinnedMeshRenderer>().material = blueMat;
+            barres.GetComponent<MeshRenderer>().material = blueMat;
         }
     }
 }
